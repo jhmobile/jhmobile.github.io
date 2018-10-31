@@ -1,0 +1,831 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="金汇移动开发团队" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="前言：2017年伊始，先给自己定了一个小目标，将Blog迁移到Hexo。本文是我2017年的开始，也是我在Hexo的开端，Mark一下！">
+<meta name="keywords" content="Hexo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo + GitHub Pages 搭建专属博客">
+<meta property="og:url" content="http://jhmobile.github.io/2017/02/08/Hexo + Github Pages 搭建专属博客/index.html">
+<meta property="og:site_name" content="金汇移动开发团队">
+<meta property="og:description" content="前言：2017年伊始，先给自己定了一个小目标，将Blog迁移到Hexo。本文是我2017年的开始，也是我在Hexo的开端，Mark一下！">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/27kshpgxiptltk7p06s1cwpr/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2023.03.22.png">
+<meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/yuxp9w6e6t7zzy8pci09p13l/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2021.58.51.png">
+<meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/4yn5l9oi90843vutpj3ng88i/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2022.01.23.png">
+<meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/nw1zvm0lfvlhxfr0b0kcy4q7/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2022.14.09.png">
+<meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/tjkk9gavd3p1ynowzwwzv9bk/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2022.35.10.png">
+<meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/t6cpsoeyr86jbc4r4fvmbhpj/blog-main.png">
+<meta property="og:updated_time" content="2017-09-05T01:48:23.231Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo + GitHub Pages 搭建专属博客">
+<meta name="twitter:description" content="前言：2017年伊始，先给自己定了一个小目标，将Blog迁移到Hexo。本文是我2017年的开始，也是我在Hexo的开端，Mark一下！">
+<meta name="twitter:image" content="http://static.zybuluo.com/LeoPoldCrossing/27kshpgxiptltk7p06s1cwpr/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2023.03.22.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jhmobile.github.io/2017/02/08/Hexo + Github Pages 搭建专属博客/">
+
+
+
+
+
+  <title> Hexo + GitHub Pages 搭建专属博客 | 金汇移动开发团队 </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">金汇移动开发团队</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">技术博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-admin">
+          <a href="/admin" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            管理
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://jhmobile.github.io/2017/02/08/Hexo + Github Pages 搭建专属博客/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jinhui-mobile">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="金汇移动开发团队">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Hexo + GitHub Pages 搭建专属博客
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-02-08T00:00:00+08:00">
+                2017-02-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/博客/" itemprop="url" rel="index">
+                    <span itemprop="name">博客</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>前言：2017年伊始，先给自己定了一个小目标，将Blog迁移到Hexo。本文是我2017年的开始，也是我在Hexo的开端，Mark一下！</p>
+</blockquote>
+<hr>
+<a id="more"></a>
+<blockquote>
+<p>摘要：本文的核心是介绍如何利用Github Pages 和 Hexo搭建自己的Blog，至于Git的使用，页面的美化，Hexo的命令等，敬请期待。。。别扔鸡蛋</p>
+</blockquote>
+<hr>
+<h1 id="Hexo-GitHub-GithubPages-介绍"><a href="#Hexo-GitHub-GithubPages-介绍" class="headerlink" title="Hexo GitHub GithubPages 介绍"></a>Hexo GitHub GithubPages 介绍</h1><h2 id="Hexo"><a href="#Hexo" class="headerlink" title="Hexo"></a>Hexo</h2><p>Hexo是一个快速、简洁且高效的博客框架，Hexo使用Markdown（或其他渲染引擎）解析文章，在几秒内即可利用靓丽的主题生成静态网页。</p>
+<h2 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h2><p>不知道Github的程序猿，不是一只好猿 ~ Github是一个面向开源及私有软件项目的托管平台，仅支持Git作为唯一的版本库格式进行托管。</p>
+<h2 id="Github-Pages"><a href="#Github-Pages" class="headerlink" title="Github Pages"></a>Github Pages</h2><p>Github Pages可以理解为用户编写的、托管在github上的静态网页，你只需将你的改动提交到Github，就可以实现更改你的网页。</p>
+<hr>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><h2 id="Node-js-点击有惊喜"><a href="#Node-js-点击有惊喜" class="headerlink" title="Node.js 点击有惊喜"></a>Node.js <a href="https://nodejs.org/en/download/" target="_blank" rel="external">点击有惊喜</a></h2><p>选择对应的安装包下载，安装我就不啰嗦了，以下命令验证安装是否成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ node -v</div><div class="line">$ npm -v</div></pre></td></tr></table></figure>
+<h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a><a href="https://git-scm.com/" target="_blank" rel="external">Git</a></h2><ul>
+<li>Window下载直接安装即可<a href="https://git-scm.com/download/win" target="_blank" rel="external">点我下载</a></li>
+<li><p>Mac建议使用HomeBrew安装Git。</p>
+<ul>
+<li><p>安装HomeBrew，终端运行下面命令</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ /usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</div></pre></td></tr></table></figure>
+</li>
+<li><p>安装Git</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ brew install git</div></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="Hexo-1"><a href="#Hexo-1" class="headerlink" title="Hexo"></a><a href="https://hexo.io/zh-cn/" target="_blank" rel="external">Hexo</a></h2><p>安装命令：<br><code>$ npm install -g hexo-cli</code></p>
+<hr>
+<h1 id="Hexo初始化-建站"><a href="#Hexo初始化-建站" class="headerlink" title="Hexo初始化(建站)"></a>Hexo初始化(建站)</h1><h2 id="初始化Blog文件夹"><a href="#初始化Blog文件夹" class="headerlink" title="初始化Blog文件夹"></a>初始化Blog文件夹</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ hexo init &lt;folder&gt;</div><div class="line">$ cd &lt;folder&gt;</div><div class="line">$ npm install</div></pre></td></tr></table></figure>
+<h2 id="文件目录"><a href="#文件目录" class="headerlink" title="文件目录"></a>文件目录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">.</div><div class="line">├── _config.yml    配置文件</div><div class="line">├── package.json   应用程序信息</div><div class="line">├── scaffolds      模板文件夹 draft.md post.md page.md    </div><div class="line">├── source         资源文件夹</div><div class="line">|   ├── _drafts</div><div class="line">|   └── _posts</div><div class="line">└── themes         主题</div></pre></td></tr></table></figure>
+<h2 id="Blog配置"><a href="#Blog配置" class="headerlink" title="Blog配置"></a>Blog配置</h2><p>打开_config.yml文件，懵逼了~眼花缭乱。。。挑几个常用的说一下，详解移步<a href="https://hexo.io/zh-cn/docs/configuration.html" target="_blank" rel="external">Hexo 站点配置</a><br><img src="http://static.zybuluo.com/LeoPoldCrossing/27kshpgxiptltk7p06s1cwpr/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2023.03.22.png" alt="屏幕快照 2017-02-08 23.03.22.png-179.7kB"></p>
+<h2 id="本地查看Blog效果"><a href="#本地查看Blog效果" class="headerlink" title="本地查看Blog效果"></a>本地查看Blog效果</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#生成静态文件</div><div class="line">$ hexo generate</div><div class="line">#启动服务器</div><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ hexo s</div><div class="line">INFO  Start processing</div><div class="line">INFO  Hexo is running at http://localhost:4000/. Press Ctrl+C to stop.</div></pre></td></tr></table></figure>
+<hr>
+<h1 id="部署Blog至Github-Pages"><a href="#部署Blog至Github-Pages" class="headerlink" title="部署Blog至Github Pages"></a>部署Blog至Github Pages</h1><h2 id="注册GitHub账户"><a href="#注册GitHub账户" class="headerlink" title="注册GitHub账户"></a><a href="https://github.com/" target="_blank" rel="external">注册GitHub账户</a></h2><h2 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h2><ul>
+<li><p>点击New Repository<br><img src="http://static.zybuluo.com/LeoPoldCrossing/yuxp9w6e6t7zzy8pci09p13l/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2021.58.51.png" alt="屏幕快照 2017-02-08 21.58.51.png-12.7kB"></p>
+</li>
+<li><p>Create a new repository<br><img src="http://static.zybuluo.com/LeoPoldCrossing/4yn5l9oi90843vutpj3ng88i/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2022.01.23.png" alt="屏幕快照 2017-02-08 22.01.23.png-85.7kB"></p>
+</li>
+</ul>
+<h2 id="配置SSH密钥"><a href="#配置SSH密钥" class="headerlink" title="配置SSH密钥"></a>配置SSH密钥</h2><p>Git本地仓库和远程仓库之间的传输协议主要使用ssh协议，所以我们需要设置ssh </p>
+<ul>
+<li>Step 1 查看是否存在SSH密钥<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ cd ~/.ssh;ls</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>如果id_rsa.pub和id_rsa文件存在，则证明ssh存在，直接进行Step 3操作</p>
+<ul>
+<li><p>Step 2 创建ssh</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># 将根据提供的Email地址生成一对密钥</div><div class="line">$ ssh-keygen -t rsa -C &quot;youremail@example.com&quot;</div><div class="line"># 回车则创建默认的ssh，文件名为id_rsa 和 id_rsa.pub</div><div class="line"></div><div class="line"># 下面的命令可以自定义文件名</div><div class="line">$ cat ~/.ssh/&lt;ssh file name&gt;.pub</div></pre></td></tr></table></figure>
+</li>
+<li><p>Step 3 添加SSH key 到 Github 账户</p>
+<ol>
+<li><p>添加公钥到Github<br><img src="http://static.zybuluo.com/LeoPoldCrossing/nw1zvm0lfvlhxfr0b0kcy4q7/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2022.14.09.png" alt="屏幕快照 2017-02-08 22.14.09.png-88.6kB"></p>
+</li>
+<li><p>左侧工具栏点击SSH and GPG keys<br>title 随意填，Key 将id_rsa.pub中的内容copy的这里</p>
+</li>
+<li>验证链接<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">    $ ssh -T git@github.com</div><div class="line">Hi LeoPoldCrossing! You&apos;ve successfully authenticated, but GitHub does not provide shell access.</div><div class="line">    # bingo! SSH配置完成</div></pre></td></tr></table></figure>
+</li>
+</ol>
+</li>
+<li><p>Step 4 绑定Git 和 Github</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ git config --global user.name &quot;your github username&quot;</div><div class="line">$ git config --global user.email &quot;your github email&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="关联Hexo和GitHub"><a href="#关联Hexo和GitHub" class="headerlink" title="关联Hexo和GitHub"></a>关联Hexo和GitHub</h2><ul>
+<li><p>Step 1 Copy仓库地址<br><img src="http://static.zybuluo.com/LeoPoldCrossing/tjkk9gavd3p1ynowzwwzv9bk/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2022.35.10.png" alt="屏幕快照 2017-02-08 22.35.10.png-106.9kB"></p>
+</li>
+<li><p>Step 2 修改_config.yml文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">deploy:</div><div class="line">  type: git</div><div class="line">  repository: https://github.com/LeoPoldCrossing/LeoPoldCrossing.github.io.git</div><div class="line">  branch: master</div></pre></td></tr></table></figure>
+</li>
+<li><p>Step 3 在博客目录下执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div><div class="line">or </div><div class="line">$ hexo g</div><div class="line">------------华丽的分割线---------</div><div class="line">$ hexo deploy</div><div class="line">or </div><div class="line">$ hexo d![blog-main.png-368.1kB][6]</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>根据提示输入github账号和密码，然后见证劳动成果的时刻<br><strong>浏览器打开 username.github.io(我的是LeoPoldCrossing.github.io)</strong>，效果图如下：<br><img src="http://static.zybuluo.com/LeoPoldCrossing/t6cpsoeyr86jbc4r4fvmbhpj/blog-main.png" alt="blog-main.png-368.1kB"></p>
+<hr>
+<p>author: <a href="https://leopoldcrossing.github.io/" target="_blank" rel="external">@ygwang</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Hexo/" rel="tag"># Hexo</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/02/09/Blog美化、写作、部署/" rel="prev" title="Blog美化、写作、部署">
+                Blog美化、写作、部署 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="jinhui-mobile">
+          <p class="site-author-name" itemprop="name">jinhui-mobile</p>
+           
+              <p class="site-description motion-element" itemprop="description">stay hungry stay foolish</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jhmobile/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Hexo-GitHub-GithubPages-介绍"><span class="nav-number">1.</span> <span class="nav-text">Hexo GitHub GithubPages 介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo"><span class="nav-number">1.1.</span> <span class="nav-text">Hexo</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Github"><span class="nav-number">1.2.</span> <span class="nav-text">Github</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Github-Pages"><span class="nav-number">1.3.</span> <span class="nav-text">Github Pages</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#环境搭建"><span class="nav-number">2.</span> <span class="nav-text">环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Node-js-点击有惊喜"><span class="nav-number">2.1.</span> <span class="nav-text">Node.js 点击有惊喜</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Git"><span class="nav-number">2.2.</span> <span class="nav-text">Git</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hexo-1"><span class="nav-number">2.3.</span> <span class="nav-text">Hexo</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hexo初始化-建站"><span class="nav-number">3.</span> <span class="nav-text">Hexo初始化(建站)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化Blog文件夹"><span class="nav-number">3.1.</span> <span class="nav-text">初始化Blog文件夹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件目录"><span class="nav-number">3.2.</span> <span class="nav-text">文件目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Blog配置"><span class="nav-number">3.3.</span> <span class="nav-text">Blog配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#本地查看Blog效果"><span class="nav-number">3.4.</span> <span class="nav-text">本地查看Blog效果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#部署Blog至Github-Pages"><span class="nav-number">4.</span> <span class="nav-text">部署Blog至Github Pages</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#注册GitHub账户"><span class="nav-number">4.1.</span> <span class="nav-text">注册GitHub账户</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建仓库"><span class="nav-number">4.2.</span> <span class="nav-text">创建仓库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置SSH密钥"><span class="nav-number">4.3.</span> <span class="nav-text">配置SSH密钥</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#关联Hexo和GitHub"><span class="nav-number">4.4.</span> <span class="nav-text">关联Hexo和GitHub</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jinhui-mobile</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

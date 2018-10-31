@@ -1,0 +1,969 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="金汇移动开发团队" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="新增短信报警优化新增post报警方式，可用于发送动态短信1234567891011# 报警方式alert:- &amp;quot;post&amp;quot;http_post_url: &amp;quot;http://adminhome.jinhui365.cn/sendSmsForAppAlert&amp;quot;# phoneList 手机号，逗号分割的字符串。例如：&amp;quot;15235446827,15235446">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ElastAlert日志监控预警">
+<meta property="og:url" content="http://jhmobile.github.io/2017/10/11/Untitled/index.html">
+<meta property="og:site_name" content="金汇移动开发团队">
+<meta property="og:description" content="新增短信报警优化新增post报警方式，可用于发送动态短信1234567891011# 报警方式alert:- &amp;quot;post&amp;quot;http_post_url: &amp;quot;http://adminhome.jinhui365.cn/sendSmsForAppAlert&amp;quot;# phoneList 手机号，逗号分割的字符串。例如：&amp;quot;15235446827,15235446">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://www.bitsensor.io/assets/img/screenshots/template.gif">
+<meta property="og:updated_time" content="2018-01-19T03:55:18.540Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ElastAlert日志监控预警">
+<meta name="twitter:description" content="新增短信报警优化新增post报警方式，可用于发送动态短信1234567891011# 报警方式alert:- &amp;quot;post&amp;quot;http_post_url: &amp;quot;http://adminhome.jinhui365.cn/sendSmsForAppAlert&amp;quot;# phoneList 手机号，逗号分割的字符串。例如：&amp;quot;15235446827,15235446">
+<meta name="twitter:image" content="https://www.bitsensor.io/assets/img/screenshots/template.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jhmobile.github.io/2017/10/11/Untitled/">
+
+
+
+
+
+  <title> ElastAlert日志监控预警 | 金汇移动开发团队 </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">金汇移动开发团队</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">技术博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-admin">
+          <a href="/admin" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            管理
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://jhmobile.github.io/2017/10/11/Untitled/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jinhui-mobile">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="金汇移动开发团队">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ElastAlert日志监控预警
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-11T16:17:00+08:00">
+                2017-10-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="新增"><a href="#新增" class="headerlink" title="新增"></a>新增</h2><h3 id="短信报警优化"><a href="#短信报警优化" class="headerlink" title="短信报警优化"></a>短信报警优化</h3><p>新增post报警方式，可用于发送动态短信<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"># 报警方式</div><div class="line">alert:</div><div class="line">- &quot;post&quot;</div><div class="line"></div><div class="line">http_post_url: &quot;http://adminhome.jinhui365.cn/sendSmsForAppAlert&quot;</div><div class="line"></div><div class="line"># phoneList 手机号，逗号分割的字符串。例如：&quot;15235446827,15235446827&quot;</div><div class="line"># content 短信内容。$&#123;&#125;代表动态内容</div><div class="line">http_post_static_payload:</div><div class="line">  phoneList: &quot;15235446827&quot;</div><div class="line">  content: &quot;$&#123;@timestamp&#125;, IOS $&#123;l&#125; 级别日志报警。版本$&#123;v&#125;,手机型号$&#123;d&#125;,日志数$&#123;num_hits&#125;.&quot;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>动态内容为邮件内容，目前仅支持首层的key字段</p>
+</blockquote>
+<p>举个例子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">邮件内容为：</div><div class="line">@timestamp: 2018-01-16T02:38:08.340Z</div><div class="line">@version: 1</div><div class="line">_id: AWD81Lv0TU1e05j5IHmu</div><div class="line">_index: ios-2018.01.16</div><div class="line">_type: logs</div><div class="line">arg: &#123;</div><div class="line">    &quot;appkey&quot;: &quot;jh28a4c4bc6734f58b&quot;, </div><div class="line">    &quot;branchNo&quot;: &quot;88&quot;, </div><div class="line">    &quot;client&quot;: &quot;iOS&quot;, </div><div class="line">    &quot;encrypt&quot;: 0, </div><div class="line">    &quot;fundAccount&quot;: &quot;881125524&quot;, </div><div class="line">    &quot;signcode&quot;: &quot;2FBDC7A4842E30B8F9ACD112261ECF28&quot;, </div><div class="line">    &quot;timestamp&quot;: &quot;1504442929685&quot;, </div><div class="line">    &quot;token&quot;: &quot;u4ftBaBm-xg=&quot;, </div><div class="line">    &quot;uid&quot;: &quot;1861574&quot;, </div><div class="line">    &quot;version&quot;: &quot;5.15.0&quot;</div><div class="line">&#125;</div><div class="line">c: iOS</div><div class="line">d: iPhone 6s Plus</div><div class="line">host: ubuntu</div><div class="line">i: B6C1AB45-C3CC-4C60-BD10-259778C6699B</div><div class="line">ip: 223.104.95.169 贵阳市 移动</div><div class="line">l: warn</div><div class="line">message: request failed:0 /receipt/list</div><div class="line">n: WiFi</div><div class="line">num_hits: 3182</div><div class="line">num_matches: 3</div><div class="line">o: 中国移动</div><div class="line">p: com.jinhui365.iphone-pay</div><div class="line">path: /data/node-dev-tools/logs/iOS.log</div><div class="line">s: 10.3.1</div><div class="line">t: 1504442928.55</div><div class="line">uid: 1861574</div><div class="line">v: 5.15.0</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">content：&quot;测试，测试，这个是个测试！message:$&#123;message&#125;,num_hits:$&#123;num_hits&#125;&quot;</div><div class="line">发送的短信为：测试，测试，这个是个测试！message:request failed:0 /receipt/list,num_hits:3182</div></pre></td></tr></table></figure>
+<h3 id="jira日志报警记录"><a href="#jira日志报警记录" class="headerlink" title="jira日志报警记录"></a>jira日志报警记录</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"># 报警标题</div><div class="line">alert_subject: &quot;&#123;0&#125; &#123;1&#125; &#123;2&#125; &#123;3&#125;&quot;</div><div class="line">alert_subject_args:</div><div class="line">- &quot;c&quot;</div><div class="line">- &quot;v&quot;</div><div class="line">- &quot;l&quot;</div><div class="line">- &quot;@timestamp&quot;</div><div class="line"></div><div class="line"># 报警方式</div><div class="line">alert:</div><div class="line">- &quot;jira&quot;</div><div class="line"></div><div class="line"># 配置（规则文件中不写）</div><div class="line">jira_server: &quot;http://jira.jinhui365.cn&quot;</div><div class="line">jira_project: &quot;ALERT&quot;</div><div class="line">jira_account_file: &quot;/home/jhjr/jinhui/java/elaticalert/java_rules/jira_acct.txt&quot;</div><div class="line"></div><div class="line"># 目前只支持Task,受限于jira</div><div class="line">jira_issuetype: &quot;Task&quot;</div><div class="line"></div><div class="line"># jira issue优先级（默认普通级别。可选0-3，数字越小优先级越高）</div><div class="line">jira_priority: 0</div><div class="line"></div><div class="line"># 添加关注者(会有jira邮件发送到对应邮箱)</div><div class="line">jira_watchers: </div><div class="line">- xfwei</div><div class="line">- yli</div></pre></td></tr></table></figure>
+<h2 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h2><ul>
+<li><a href="https://github.com/bitsensor/elastalert-kibana-plugin" target="_blank" rel="external">ElastAlert Kibana plugin</a></li>
+<li><a href="https://github.com/bitsensor/elastalert" target="_blank" rel="external">Elastalert Server</a></li>
+<li><a href="https://github.com/Yelp/elastalert/tree/v0.0.96" target="_blank" rel="external">Elastalert</a></li>
+</ul>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><ol>
+<li>根据<a href="https://github.com/bitsensor/elastalert#installing-kibana-plugin" target="_blank" rel="external">ElastAlert Server安装教程</a>进行kibana插件和ElastAlert Server安装.</li>
+<li>根据<a href="http://elastalert.readthedocs.io/en/latest/running_elastalert.html" target="_blank" rel="external">ElastAlert官方网站</a>安装Elastalert.</li>
+</ol>
+<h2 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h2><h3 id="Elastalert-Server"><a href="#Elastalert-Server" class="headerlink" title="Elastalert Server"></a>Elastalert Server</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  &quot;appName&quot;: &quot;elastalert-server&quot;,</div><div class="line">  &quot;port&quot;: 3030, //指定指定elastalert　server端口，为kibana插件提供服务</div><div class="line">  &quot;elastalertPath&quot;: &quot;/opt/elastalert/elastalert&quot;, //指定elastalert路径</div><div class="line">  &quot;verbose&quot;: true,</div><div class="line">  &quot;es_debug&quot;: true,</div><div class="line">  &quot;debug&quot;: false,</div><div class="line">  &quot;rulesPath&quot;: &#123;　//elastalert报警规则存储相对路径</div><div class="line">    &quot;relative&quot;: true,</div><div class="line">    &quot;path&quot;: &quot;/rules&quot;</div><div class="line">  &#125;,</div><div class="line">  &quot;templatesPath&quot;: &#123;　//规则模板相对路径</div><div class="line">    &quot;relative&quot;: true,</div><div class="line">    &quot;path&quot;: &quot;/rule_templates&quot;</div><div class="line">  &#125;,</div><div class="line">  &quot;dataPath&quot;: &#123; //测试数据存储路径</div><div class="line">    &quot;relative&quot;: true, folder.</div><div class="line">    &quot;path&quot;: &quot;/server_data&quot;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>详细配置见<a href="https://github.com/bitsensor/elastalert#config" target="_blank" rel="external">Elastalert Server 配置</a></p>
+</blockquote>
+<h3 id="ElastAlert"><a href="#ElastAlert" class="headerlink" title="ElastAlert"></a>ElastAlert</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">es_host: 10.0.0.219</div><div class="line">es_port: 9200</div><div class="line"></div><div class="line"># 规则文件夹</div><div class="line">rules_folder: rules</div><div class="line"></div><div class="line"># 查询频率</div><div class="line">run_every:</div><div class="line">  minutes: 1</div><div class="line"></div><div class="line"># 查询时间片（可覆盖）</div><div class="line">buffer_time:</div><div class="line">  minutes: 60</div><div class="line">  </div><div class="line"># 邮箱配置</div><div class="line">smtp_host: mail.rxhui.com</div><div class="line">smtp_port: 25</div><div class="line"></div><div class="line">smtp_auth_file: /opt/elastalert/config/smtp_auth_file.yaml</div><div class="line">email_reply_to: monitor@rxhui.com</div><div class="line">from_addr: monitor@rxhui.com</div><div class="line"></div><div class="line"># 写回kibana中的索引</div><div class="line">writeback_index: elastalert_status</div><div class="line"></div><div class="line"># 重发机制</div><div class="line">alert_time_limit:</div><div class="line">  days: 2</div></pre></td></tr></table></figure>
+<blockquote>
+<p>详细配置见<a href="http://elastalert.readthedocs.io/en/latest/ruletypes.html" target="_blank" rel="external">Elastalert 配置</a></p>
+</blockquote>
+<h2 id="使用教程"><a href="#使用教程" class="headerlink" title="使用教程"></a>使用教程</h2><h3 id="打开方式"><a href="#打开方式" class="headerlink" title="打开方式"></a>打开方式</h3><ol>
+<li>该功能嵌入至kibana中，打开kibana:<strong><a href="http://10.0.0.219:5601" target="_blank" rel="external">http://10.0.0.219:5601</a></strong>左上角setting右侧有个展开按钮，可供选择进入elastalert功能。</li>
+<li>直接输入<strong><a href="http://10.0.0.219:5601/app/elastalert" target="_blank" rel="external">http://10.0.0.219:5601/app/elastalert</a></strong>进入。</li>
+</ol>
+<h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><p><img src="https://www.bitsensor.io/assets/img/screenshots/template.gif" alt="操作动态图"></p>
+<ul>
+<li>＋ New Rule可添加一条新的规则</li>
+<li>点击规则可以删除和修改</li>
+<li>规则页面右侧有一些模板可以点击展示</li>
+<li>规则页面左上角退出，右上角分别为[测试],[保存]，测试完成后右侧会有输出</li>
+</ul>
+<p><strong>注意</strong></p>
+<blockquote>
+<p>１．添加新的规则需测试后才能保存，若直接保存可能因规则错误导致监听停止。<br>２．添加新的规则如果不想继续添加，记得将目录页该规则删除。<br>３．若因错误操作导致监听停止，可删除错误规则文件后访问<strong><a href="http://10.0.0.219:3030/status/control/start" target="_blank" rel="external">http://10.0.0.219:3030/status/control/start</a></strong>重新启动监听，通过<strong><a href="http://10.0.0.219:3030/status" target="_blank" rel="external">http://10.0.0.219:3030/status</a></strong>查看监听状态</p>
+</blockquote>
+<h2 id="ElastAlert-配置和规则说明"><a href="#ElastAlert-配置和规则说明" class="headerlink" title="ElastAlert 配置和规则说明"></a>ElastAlert 配置和规则说明</h2><h3 id="ElastAlert-配置"><a href="#ElastAlert-配置" class="headerlink" title="ElastAlert 配置"></a>ElastAlert 配置</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>　说明</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>es_host</td>
+<td>　Elasticsearch的host地址</td>
+<td></td>
+</tr>
+<tr>
+<td>es_port</td>
+<td>Elasticsearch的端口号</td>
+<td>默认为9200</td>
+</tr>
+<tr>
+<td>rules_folder</td>
+<td>规则文件夹的名称</td>
+<td></td>
+</tr>
+<tr>
+<td>run_every</td>
+<td>用来设置定时向elasticsearch发送请求</td>
+</tr>
+<tr>
+<td>buffer_time</td>
+<td>用来设置请求李时间字段的范围</td>
+<td></td>
+</tr>
+<tr>
+<td>realert</td>
+<td>设定报警后的一段时间内忽略报警</td>
+<td>默认为1分钟，可以设置为0</td>
+</tr>
+<tr>
+<td>query_delay</td>
+<td>减去查询所花的时间</td>
+<td></td>
+</tr>
+<tr>
+<td>writeback_index</td>
+<td>elastalert产生的日志在elasticsearch中创建的索引</td>
+<td></td>
+</tr>
+<tr>
+<td>alert_time_limit</td>
+<td>失败重试的时间设置</td>
+</tr>
+<tr>
+<td>es_send_get_body_as</td>
+<td>查询Elasticsearch的请求方式</td>
+<td>默认为get</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ElastAlert-规则"><a href="#ElastAlert-规则" class="headerlink" title="ElastAlert 规则"></a>ElastAlert 规则</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>说明</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>规则名称</td>
+<td>英文，不能包含中文</td>
+</tr>
+<tr>
+<td>type</td>
+<td>报警规则检查类型</td>
+</tr>
+<tr>
+<td>alert</td>
+<td>报警的方式</td>
+</tr>
+<tr>
+<td>index</td>
+<td>监视的索引</td>
+</tr>
+<tr>
+<td>filter</td>
+<td>检索的条件</td>
+</tr>
+<tr>
+<td>realert</td>
+<td>设置n时间内只警报一次</td>
+</tr>
+<tr>
+<td>email</td>
+<td>若报警有email方式，为收邮件的邮箱</td>
+</tr>
+<tr>
+<td>aggregation</td>
+<td>聚合日志，能够攒齐了一段时间的警告再上报。也可以用schedule定时间发送这一段时间的所有警告</td>
+<td>可以考虑是否使用</td>
+</tr>
+<tr>
+<td>import</td>
+<td>可以引用公共部分</td>
+<td>后续的规则多了之后考虑将公共部分抽出</td>
+</tr>
+</tbody>
+</table>
+<h4 id="报警类型"><a href="#报警类型" class="headerlink" title="报警类型"></a>报警类型</h4><ul>
+<li>any：只要有匹配就报警；</li>
+<li>blacklist：compare_key字段的内容匹配上 blacklist数组里任意内容；</li>
+<li>whitelist：compare_key字段的内容一个都没能匹配上whitelist数组里内容；</li>
+<li>frequency：在相同 query_key条件下，timeframe 范围内有num_events个被过滤出 来的异常；</li>
+<li>change：在相同query_key条件下，compare_key字段的内容，在timeframe范围内 发生变化；</li>
+<li>spike：在相同query_key条件下，前后两个timeframe范围内数据量相差比例超过spike_height。其中可以通过spike_type设置具体涨跌方向是up,down,both 。还可以通过threshold_ref设置要求上一个周期数据量的下限，threshold_cur设置要求当前周期数据量的下限，如果数据量不到下限，也不触发；</li>
+<li>flatline：timeframe 范围内，数据量小于threshold 阈值；</li>
+<li>new_term：fields字段新出现之前terms_window_size(默认30天)范围内最多的terms_size (默认50)个结果以外的数据；</li>
+<li>cardinality：在相同 query_key条件下，timeframe范围内cardinality_field的值超过 max_cardinality 或者低于min_cardinality</li>
+</ul>
+<h4 id="报警方式"><a href="#报警方式" class="headerlink" title="报警方式"></a>报警方式</h4><ul>
+<li>Command</li>
+<li>email</li>
+<li>jira</li>
+<li>post</li>
+</ul>
+<blockquote>
+<p>具体规则书写查看文章末尾规则模板</p>
+</blockquote>
+<h3 id="ElastAlert-1"><a href="#ElastAlert-1" class="headerlink" title="ElastAlert"></a>ElastAlert</h3><h4 id="查询方式"><a href="#查询方式" class="headerlink" title="查询方式"></a>查询方式</h4><ul>
+<li><p>query_string<br>查询</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">filter:</div><div class="line">- query_string:</div><div class="line">    query: &quot;username: bob&quot;</div></pre></td></tr></table></figure>
+<p>query_string类型和Lucene的查询规则一致，具体细节可查看<a href="http://lucene.apache.org/core/2_9_4/queryparsersyntax.html" target="_blank" rel="external">Lucene Query</a><br>也可以通过将kibana上面的json格式转化为yaml的格式查询</p>
+</li>
+<li><p>term<br>精确匹配键值对</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">filter:</div><div class="line">- terms:</div><div class="line">    field: [&quot;value1&quot;, &quot;value2&quot;]</div></pre></td></tr></table></figure>
+</li>
+<li><p>terms<br>键值对匹配多个值</p>
+</li>
+<li><p>wildcard<br>标准的 shell 通配符</p>
+</li>
+<li><p>range<br>范围</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">filter:</div><div class="line">- range:</div><div class="line">    status_code:</div><div class="line">    from: 500</div><div class="line">    to: 599</div></pre></td></tr></table></figure>
+</li>
+<li><p>Negation, and, or<br>与或非</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">filter:</div><div class="line">- or:</div><div class="line">    - term:</div><div class="line">        field: &quot;value&quot;</div><div class="line">    - wildcard:</div><div class="line">        field: &quot;foo*bar&quot;</div><div class="line">    - and:</div><div class="line">        - not:</div><div class="line">            term:</div><div class="line">              field: &quot;value&quot;</div><div class="line">        - not:</div><div class="line">            term:</div><div class="line">              _type: &quot;something&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>以上规则在文档<a href="http://elastalert.readthedocs.io/en/latest/recipes/writing_filters.html#common-filter-types" target="_blank" rel="external">ElastAlert Filters</a>中皆有详细描述</p>
+<h2 id="规则模板"><a href="#规则模板" class="headerlink" title="规则模板"></a>规则模板</h2><h3 id="复杂的query-string查询"><a href="#复杂的query-string查询" class="headerlink" title="复杂的query_string查询"></a>复杂的query_string查询</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div></pre></td><td class="code"><pre><div class="line"># 时间标准</div><div class="line"># seconds: 0~60</div><div class="line"># minutes: 0~60</div><div class="line"># hours: 0~60</div><div class="line"># days: n</div><div class="line">type: frequency</div><div class="line"></div><div class="line"># 规则名称</div><div class="line">name: android_log_test</div><div class="line"></div><div class="line"># 轮询频率，run_every建议小于timeframe</div><div class="line">run_every: </div><div class="line">  minutes: 1</div><div class="line"></div><div class="line"># 轮转日志块，buffer_time大于timeframe，且建议为timeframe的整数倍（2-3倍）</div><div class="line">buffer_time:</div><div class="line">  minutes: 15</div><div class="line"></div><div class="line"># 触发标准，再timeframe时间内发生num_events数量的事件，触发报警</div><div class="line"># 事件发生时间范围</div><div class="line">timeframe:</div><div class="line">  minutes: 5</div><div class="line"># 事件发生数量</div><div class="line">num_events: 2</div><div class="line"></div><div class="line"># 查询索引，参照kibana中的索引</div><div class="line">index: android-*</div><div class="line"></div><div class="line"># 检索条件</div><div class="line"># 更详细的查询：http://lucene.apache.org/core/2_9_4/queryparsersyntax.html</div><div class="line"># query: &quot;message: \&quot;load patch error\&quot; AND message: lo?d&quot;</div><div class="line"># message==&quot;load patch error&quot; &amp;&amp; message: &quot;lo?d&quot;</div><div class="line"></div><div class="line"># + - &amp;&amp; || ! ( ) &#123; &#125; [ ] ^ &quot; ~ * ? : \ </div><div class="line"># 以上字符需转义</div><div class="line"></div><div class="line"># 基本键值对查询</div><div class="line"># query: &quot;key: \&quot;value\&quot;&quot;</div><div class="line"># 反例：query: &quot;key: value1 value2 value3&quot; 这将查询key==value1 || 包含value2的log || 包含value3的log</div><div class="line"></div><div class="line"># 键值对模糊查询用通配符</div><div class="line"># query：&quot;key: v*e&quot;</div><div class="line"></div><div class="line"># 与或非</div><div class="line"># key1 AND key2</div><div class="line"># key1 OR key2</div><div class="line"># NOT key1</div><div class="line"></div><div class="line"># 分组查询： （）代表分组</div><div class="line"># query: &quot;title:(return AND \&quot;pink panther\&quot;)&quot; title==&quot;return&quot; &amp;&amp; title=&quot;pink panther&quot; （return可以用通配符，被引号引住的pink panther不能用通配）</div><div class="line"># (key1 OR key2) AND key3</div><div class="line"></div><div class="line"></div><div class="line">filter:</div><div class="line">- query:</div><div class="line">    query_string:</div><div class="line">      query: &quot;message: \&quot;load patch error\&quot; AND message: lo?d&quot;</div><div class="line"></div><div class="line"># 规定n个时间内不会多次收到相同日志，frequency方式下该字段建议定义为timeframe的整数倍</div><div class="line">realert:</div><div class="line">  minutes: 5</div><div class="line"></div><div class="line"># 报警方式</div><div class="line">alert:</div><div class="line">- &quot;email&quot;</div><div class="line"># - &quot;command&quot;</div><div class="line"></div><div class="line"># phoneList为,分割的手机号字符串，content为接收手机内容</div><div class="line"># command: [&quot;curl&quot;, &quot;-X&quot;, &quot;POST&quot;, &quot;--header&quot;, &quot;Content-Type: application/json&quot;, &quot;--header&quot;, &quot;Accept: */*&quot;, &quot;http://adminhome.jinhui365.cn:8009/sendSms?phoneList=15235446827&amp;content=测试&quot;]</div><div class="line"></div><div class="line">email:</div><div class="line">- &quot;yli@rxhui.com&quot;</div><div class="line"># - &quot;15235446827@139.com&quot;</div></pre></td></tr></table></figure>
+<h3 id="与或非查询"><a href="#与或非查询" class="headerlink" title="与或非查询"></a>与或非查询</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div></pre></td><td class="code"><pre><div class="line"># 时间标准</div><div class="line"># seconds: 0~60</div><div class="line"># minutes: 0~60</div><div class="line"># hours: 0~60</div><div class="line"># days: n</div><div class="line">type: frequency</div><div class="line"></div><div class="line"># 规则名称</div><div class="line">name: android_log_test</div><div class="line"></div><div class="line"># 轮询频率，run_every建议小于timeframe</div><div class="line">run_every: </div><div class="line">  minutes: 1</div><div class="line"></div><div class="line"># 轮转日志块，buffer_time大于timeframe，且建议为timeframe的整数倍（2-3倍）</div><div class="line">buffer_time:</div><div class="line">  minutes: 15</div><div class="line"></div><div class="line"># 触发标准，再timeframe时间内发生num_events数量的事件，触发报警</div><div class="line"># 事件发生时间范围</div><div class="line">timeframe:</div><div class="line">  minutes: 5</div><div class="line"># 事件发生数量</div><div class="line">num_events: 2</div><div class="line"></div><div class="line"># 查询索引，参照kibana中的索引</div><div class="line">index: android-*</div><div class="line"></div><div class="line"># 检索条件</div><div class="line"># 翻译kibana查询语句，特殊字符@要用“”包起来</div><div class="line"># message==&quot;text data message&quot; &amp;&amp; @version==&quot;1&quot; &amp;&amp; (uid==&quot;1111&quot; || !v==&quot;5.22.0&quot;)</div><div class="line"></div><div class="line">filter:</div><div class="line">- and:</div><div class="line">  - query:</div><div class="line">      match:</div><div class="line">        message:  </div><div class="line">          query: &quot;text data message&quot;</div><div class="line">          type: &quot;phrase&quot;</div><div class="line">  - query:</div><div class="line">      match:</div><div class="line">        &quot;@version&quot;:</div><div class="line">          query: &quot;1&quot;</div><div class="line">          type: &quot;phrase&quot;</div><div class="line">  - or:</div><div class="line">    - query:</div><div class="line">        match:</div><div class="line">          uid:</div><div class="line">            query: &quot;1111&quot;</div><div class="line">            type: &quot;phrase&quot;</div><div class="line">    - not:</div><div class="line">      - query:</div><div class="line">          match:</div><div class="line">            v:</div><div class="line">              query: &quot;5.22.0&quot;</div><div class="line">              type: &quot;phrase&quot;</div><div class="line"></div><div class="line"># 规定n个时间内不会多次收到相同日志，frequency方式下该字段建议定义为timeframe的整数倍</div><div class="line">realert:</div><div class="line">  minutes: 5</div><div class="line"></div><div class="line"># 报警方式</div><div class="line">alert:</div><div class="line">- &quot;email&quot;</div><div class="line"># - &quot;command&quot;</div><div class="line"></div><div class="line"># phoneList为,分割的手机号字符串，content为接收手机内容</div><div class="line"># command: [&quot;curl&quot;, &quot;-X&quot;, &quot;POST&quot;, &quot;--header&quot;, &quot;Content-Type: application/json&quot;, &quot;--header&quot;, &quot;Accept: */*&quot;, &quot;http://adminhome.jinhui365.cn:8009/sendSms?phoneList=15235446827&amp;content=测试&quot;]</div><div class="line"></div><div class="line">email:</div><div class="line">- &quot;yli@rxhui.com&quot;</div><div class="line"># - &quot;15235446827@139.com&quot;</div></pre></td></tr></table></figure>
+<h2 id="ElastAlert-Server-API"><a href="#ElastAlert-Server-API" class="headerlink" title="ElastAlert Server API"></a>ElastAlert Server API</h2><p>This server exposes the following REST API’s:</p>
+<ul>
+<li><p><strong>GET <code>/</code></strong></p>
+<p>  Exposes the current version running</p>
+</li>
+<li><p><strong>GET <code>/status</code></strong></p>
+<p>  Returns either ‘SETUP’, ‘READY’, ‘ERROR’, ‘STARTING’, ‘CLOSING’, ‘FIRST_RUN’ or ‘IDLE’ depending on the current ElastAlert process status. </p>
+</li>
+<li><p><strong>GET <code>/status/control/:action</code></strong></p>
+<p>  Where <code>:action</code> can be either ‘start’ or ‘stop’, which will respectively start or stop the current ElastAlert process.</p>
+</li>
+<li><p><strong>[WIP] GET <code>/status/errors</code></strong></p>
+<p>  When <code>/status</code> returns ‘ERROR’ this returns a list of errors that were triggered.</p>
+</li>
+<li><p><strong>GET <code>/rules</code></strong></p>
+<p>  Returns a list of directories and rules that exist in the <code>rulesPath</code> (from the config) and are being run by the ElastAlert process.</p>
+</li>
+<li><p><strong>GET <code>/rules/:id</code></strong></p>
+<p>  Where <code>:id</code> is the id of the rule returned by <strong>GET <code>/rules</code></strong>, which will return the file contents of that rule.</p>
+</li>
+<li><p><strong>POST <code>/rules/:id</code></strong></p>
+<p>  Where <code>:id</code> is the id of the rule returned by <strong>GET <code>/rules</code></strong>, which will allow you to edit the rule. The body send should be:</p>
+<pre><code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="comment">// Required - The full yaml rule config.</span></div><div class="line">  <span class="string">"yaml"</span>: <span class="string">"..."</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre></li>
+</ul>
+<ul>
+<li><p><strong>DELETE <code>/rules/:id</code></strong></p>
+<p>  Where <code>:id</code> is the id of the rule returned by <strong>GET <code>/rules</code></strong>, which will delete the given rule.</p>
+</li>
+<li><p><strong>GET <code>/templates</code></strong></p>
+<p>  Returns a list of directories and templates that exist in the <code>templatesPath</code> (from the config) and are being run by the ElastAlert process.</p>
+</li>
+<li><p><strong>GET <code>/templates/:id</code></strong></p>
+<p>  Where <code>:id</code> is the id of the template returned by <strong>GET <code>/templates</code></strong>, which will return the file contents of that template.</p>
+</li>
+<li><p><strong>POST <code>/templates/:id</code></strong></p>
+<p>  Where <code>:id</code> is the id of the template returned by <strong>GET <code>/templates</code></strong>, which will allow you to edit the template. The body send should be:</p>
+<pre><code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="comment">// Required - The full yaml template config.</span></div><div class="line">  <span class="string">"yaml"</span>: <span class="string">"..."</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</code></pre></li>
+</ul>
+<ul>
+<li><p><strong>DELETE <code>/templates/:id</code></strong></p>
+<p>  Where <code>:id</code> is the id of the template returned by <strong>GET <code>/templates</code></strong>, which will delete the given template.</p>
+</li>
+<li><p><strong>POST <code>/test</code></strong></p>
+<p>  This allows you to test a rule. The body send should be:</p>
+<pre><code><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">      &#123;</div><div class="line">        <span class="comment">// Required - The full yaml rule config.</span></div><div class="line">        <span class="string">"rule"</span>: <span class="string">"..."</span>,</div><div class="line">        </div><div class="line">        <span class="comment">// Optional - The options to use for testing the rule.</span></div><div class="line">        <span class="string">"options"</span>: &#123;</div><div class="line">        </div><div class="line">          <span class="comment">// Can be either "all", "schemaOnly" or "countOnly". "all" will give the full console output. </span></div><div class="line">          <span class="comment">// "schemaOnly" will only validate the yaml config. "countOnly" will only find the number of matching documents and list available fields.</span></div><div class="line">          <span class="string">"testType"</span>: <span class="string">"all"</span>,</div><div class="line">          </div><div class="line">          <span class="comment">// Can be any number larger than 0 and this tells ElastAlert over a period of how many days the test should be run</span></div><div class="line">          <span class="string">"days"</span>: <span class="string">"1"</span></div><div class="line">          </div><div class="line">          <span class="comment">// Whether to send real alerts</span></div><div class="line">          <span class="string">"alert"</span>: <span class="literal">false</span></div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">      <span class="string">``</span><span class="string">` </span></div><div class="line"><span class="string">    </span></div><div class="line"><span class="string">- **[WIP] GET `</span>/config<span class="string">`**</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Gets the ElastAlert configuration from `</span>config.yaml<span class="string">` in `</span>elastalertPath<span class="string">` (from the config).</span></div><div class="line"><span class="string">  </span></div><div class="line"><span class="string">- **[WIP] POST `</span>/config<span class="string">`**</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Allows you to edit the ElastAlert configuration from `</span>config.yaml<span class="string">` in `</span>elastalertPath<span class="string">` (from the config). The required body to be send will be edited when the work on this API is done.</span></div><div class="line"><span class="string"> </span></div><div class="line"><span class="string">## ElastAlert监控规律</span></div><div class="line"><span class="string">ElastAlert根据config中的run_every设置的时间频率去轮询，每次查询的时间块都是buffer_time</span></div></pre></td></tr></table></figure>
+</code></pre><p>  基本查询规律：<br>  配置: run_every:20s, buffer_time:1min</p>
+<p>  当前时间1月17日9时启动监控<br>  当前时间   日志时间块<br>  9:00:00   8:59:00~9:00:00<br>  9:00:20   9:00:00~9:00:20<br>  9:00:40   9:00:00~9:00:40<br>  9:01:00   9:00:00~9:01:00<br>  9:01:20   9:01:00~9:01:20<br>  9:01:40   9:01:00~9:01:40<br>  9:02:00   9:01:00~9:02:00<br>```</p>
+<p><strong>传送门</strong></p>
+</li>
+<li><a href="https://bitsensor.io/index.php" target="_blank" rel="external">Bitsensor博客网站</a></li>
+<li><a href="https://github.com/bitsensor/elastalert-kibana-plugin" target="_blank" rel="external">ElastAlert Kibana Plugin</a></li>
+<li><a href="https://github.com/bitsensor/elastalert" target="_blank" rel="external">Elastalert Server</a></li>
+<li><a href="https://github.com/Yelp/elastalert" target="_blank" rel="external">Elastalert Github</a></li>
+<li><a href="http://elastalert.readthedocs.io/en/latest/running_elastalert.html" target="_blank" rel="external">ElastAlert官方网站</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/11/ECMAScript-2015-语法分享/" rel="next" title="ECMAScript 2015 语法分享">
+                <i class="fa fa-chevron-left"></i> ECMAScript 2015 语法分享
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/25/ESLint入门与实践初步/" rel="prev" title="ESLint入门与实践初步">
+                ESLint入门与实践初步 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="jinhui-mobile">
+          <p class="site-author-name" itemprop="name">jinhui-mobile</p>
+           
+              <p class="site-description motion-element" itemprop="description">stay hungry stay foolish</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jhmobile/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#新增"><span class="nav-number">1.</span> <span class="nav-text">新增</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#短信报警优化"><span class="nav-number">1.1.</span> <span class="nav-text">短信报警优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jira日志报警记录"><span class="nav-number">1.2.</span> <span class="nav-text">jira日志报警记录</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结构"><span class="nav-number">2.</span> <span class="nav-text">结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装"><span class="nav-number">3.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置"><span class="nav-number">4.</span> <span class="nav-text">配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Elastalert-Server"><span class="nav-number">4.1.</span> <span class="nav-text">Elastalert Server</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ElastAlert"><span class="nav-number">4.2.</span> <span class="nav-text">ElastAlert</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用教程"><span class="nav-number">5.</span> <span class="nav-text">使用教程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#打开方式"><span class="nav-number">5.1.</span> <span class="nav-text">打开方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本操作"><span class="nav-number">5.2.</span> <span class="nav-text">基本操作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ElastAlert-配置和规则说明"><span class="nav-number">6.</span> <span class="nav-text">ElastAlert 配置和规则说明</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ElastAlert-配置"><span class="nav-number">6.1.</span> <span class="nav-text">ElastAlert 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ElastAlert-规则"><span class="nav-number">6.2.</span> <span class="nav-text">ElastAlert 规则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#报警类型"><span class="nav-number">6.2.1.</span> <span class="nav-text">报警类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#报警方式"><span class="nav-number">6.2.2.</span> <span class="nav-text">报警方式</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ElastAlert-1"><span class="nav-number">6.3.</span> <span class="nav-text">ElastAlert</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#查询方式"><span class="nav-number">6.3.1.</span> <span class="nav-text">查询方式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#规则模板"><span class="nav-number">7.</span> <span class="nav-text">规则模板</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#复杂的query-string查询"><span class="nav-number">7.1.</span> <span class="nav-text">复杂的query_string查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#与或非查询"><span class="nav-number">7.2.</span> <span class="nav-text">与或非查询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ElastAlert-Server-API"><span class="nav-number">8.</span> <span class="nav-text">ElastAlert Server API</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jinhui-mobile</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

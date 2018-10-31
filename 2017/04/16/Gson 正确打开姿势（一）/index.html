@@ -1,0 +1,783 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Gson,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="金汇移动开发团队" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="JSON (官网) 是一种文本形式的数据交换格式，它比XML更轻量、比二进制容易阅读和编写，调式也更加方便。其重要性不言而喻。解析和生成的方式很多，Java中最常用的类库有：JSON-Java、Gson、Jackson、FastJson等。项目中使用了Gson，然而现在发现Gson差点被自己玩坏，所以决定好好学习一下~">
+<meta name="keywords" content="Gson">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gson 正确打开姿势（一）">
+<meta property="og:url" content="http://jhmobile.github.io/2017/04/16/Gson 正确打开姿势（一）/index.html">
+<meta property="og:site_name" content="金汇移动开发团队">
+<meta property="og:description" content="JSON (官网) 是一种文本形式的数据交换格式，它比XML更轻量、比二进制容易阅读和编写，调式也更加方便。其重要性不言而喻。解析和生成的方式很多，Java中最常用的类库有：JSON-Java、Gson、Jackson、FastJson等。项目中使用了Gson，然而现在发现Gson差点被自己玩坏，所以决定好好学习一下~">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-05T01:48:23.231Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Gson 正确打开姿势（一）">
+<meta name="twitter:description" content="JSON (官网) 是一种文本形式的数据交换格式，它比XML更轻量、比二进制容易阅读和编写，调式也更加方便。其重要性不言而喻。解析和生成的方式很多，Java中最常用的类库有：JSON-Java、Gson、Jackson、FastJson等。项目中使用了Gson，然而现在发现Gson差点被自己玩坏，所以决定好好学习一下~">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jhmobile.github.io/2017/04/16/Gson 正确打开姿势（一）/">
+
+
+
+
+
+  <title> Gson 正确打开姿势（一） | 金汇移动开发团队 </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">金汇移动开发团队</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">技术博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-admin">
+          <a href="/admin" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            管理
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://jhmobile.github.io/2017/04/16/Gson 正确打开姿势（一）/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jinhui-mobile">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="金汇移动开发团队">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Gson 正确打开姿势（一）
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-04-16T11:40:48+08:00">
+                2017-04-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>JSON (官网) 是一种文本形式的数据交换格式，它比XML更轻量、比二进制容易阅读和编写，调式也更加方便。其重要性不言而喻。解析和生成的方式很多，Java中最常用的类库有：JSON-Java、Gson、Jackson、FastJson等。<br>项目中使用了Gson，然而现在发现Gson差点被自己玩坏，所以决定好好学习一下~</p>
+<a id="more"></a>
+<h1 id="Gson-基本用法"><a href="#Gson-基本用法" class="headerlink" title="Gson 基本用法"></a>Gson 基本用法</h1><p>Gson 提供了两个方法 <code>fromJson()</code> 和 <code>toJson()</code>方法直接用于解析和生成Json。前者实现反序列化，后者实现序列化。</p>
+<h2 id="基本数据类型解析"><a href="#基本数据类型解析" class="headerlink" title="基本数据类型解析"></a>基本数据类型解析</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">Gson gson = <span class="keyword">new</span> Gson();</div><div class="line"><span class="keyword">int</span> i = gson.fromJson(<span class="string">"100"</span>, <span class="keyword">int</span>.class);              <span class="comment">//100</span></div><div class="line"><span class="keyword">double</span> d = gson.fromJson(<span class="string">"\"99.99\""</span>, <span class="keyword">double</span>.class);  <span class="comment">//99.99</span></div><div class="line"><span class="keyword">boolean</span> b = gson.fromJson(<span class="string">"true"</span>, <span class="keyword">boolean</span>.class);     <span class="comment">// true</span></div><div class="line">String str = gson.fromJson(<span class="string">"String"</span>, String.class);   <span class="comment">// String</span></div></pre></td></tr></table></figure>
+<h2 id="基本数据类型生成"><a href="#基本数据类型生成" class="headerlink" title="基本数据类型生成"></a>基本数据类型生成</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">Gson gson = <span class="keyword">new</span> Gson();</div><div class="line">String jsonNumber = gson.toJson(<span class="number">100</span>);       <span class="comment">// 100</span></div><div class="line">String jsonBoolean = gson.toJson(<span class="keyword">false</span>);    <span class="comment">// false</span></div><div class="line">String jsonString = gson.toJson(<span class="string">"String"</span>); <span class="comment">//"String"</span></div></pre></td></tr></table></figure>
+<h2 id="POJO类的生成与解析"><a href="#POJO类的生成与解析" class="headerlink" title="POJO类的生成与解析"></a>POJO类的生成与解析</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span></span>&#123;</div><div class="line">    <span class="keyword">public</span> String name;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> age;</div><div class="line">    <span class="keyword">public</span> String emailAddress;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>生成Json：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Gson gson = <span class="keyword">new</span> Gson();</div><div class="line">User user = <span class="keyword">new</span> User(<span class="string">"怪盗kidou"</span>,<span class="number">24</span>);</div><div class="line">String jsonObject = gson.toJson(user); <span class="comment">// &#123;"name":"怪盗kidou","age":24&#125;</span></div></pre></td></tr></table></figure></p>
+<p>解析Json：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Gson gson = <span class="keyword">new</span> Gson();</div><div class="line">String jsonString = <span class="string">"&#123;\"name\":\"怪盗kidou\",\"age\":24&#125;"</span>;</div><div class="line">User user = gson.fromJson(jsonString, User.class);</div></pre></td></tr></table></figure></p>
+<h1 id="属性重命名"><a href="#属性重命名" class="headerlink" title="属性重命名"></a>属性重命名</h1><p>之前我们认为Gson对于服务器json数据的解析，属性名称需要与json中的key保持一致，一一对应。但是我们经常会遇到一些不和谐的情况。。。</p>
+<h2 id="SerializedName注解使用"><a href="#SerializedName注解使用" class="headerlink" title="@SerializedName注解使用"></a>@SerializedName注解使用</h2><p>我们期望的json数据<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="attr">"name"</span>:<span class="string">"leo"</span>,<span class="attr">"age"</span>:<span class="number">28</span>,<span class="attr">"emailAddress"</span>:<span class="string">"leo@example.com"</span>&#125;</div></pre></td></tr></table></figure></p>
+<p>服务端返回的json数据<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="attr">"name"</span>:<span class="string">"leo"</span>,<span class="attr">"age"</span>:<span class="number">28</span>,<span class="attr">"email_address"</span>:leo@example.com&#125;</div></pre></td></tr></table></figure></p>
+<p>谷歌的大神，怎么可能不考虑这个问题，我们来看一下如何处理，我们只需要将POJO中属性变成<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">@SerializedName(&quot;email_address&quot;)</div><div class="line">public String emailAddress;</div></pre></td></tr></table></figure></p>
+<p>哦了，重命名的问题搞定~如果接口重用，后端的开发人员也更换了，来了一个偷懒的人。。。出现了下面的数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&quot;name&quot;:&quot;leo&quot;,&quot;age&quot;:28,&quot;emailAddress&quot;:&quot;leo@example.com&quot;&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&quot;name&quot;:&quot;leo&quot;,&quot;age&quot;:28,&quot;email_address&quot;:leo@example.com&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;&quot;name&quot;:&quot;leo&quot;,&quot;age&quot;:28,&quot;email&quot;:leo@example.com&#125;</div></pre></td></tr></table></figure>
+<p>我们如何处理？</p>
+<h2 id="为POJO字段提供属性备选名"><a href="#为POJO字段提供属性备选名" class="headerlink" title="为POJO字段提供属性备选名"></a>为POJO字段提供属性备选名</h2><p>SerializedName注解提供了两个属性，上面用到了其中一个，另外还有一个属性alternate（2.4版本以上），接收一个String数组。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@SerializedName</span>(value = <span class="string">"emailAddress"</span>, alternate = &#123;<span class="string">"email"</span>, <span class="string">"email_address"</span>&#125;)</div><div class="line"><span class="keyword">public</span> String emailAddress;</div></pre></td></tr></table></figure></p>
+<p>当上面的三个属性(email_address、email、emailAddress)出现任意一个时都可以得到正确的结果。</p>
+<h1 id="Gson泛型使用"><a href="#Gson泛型使用" class="headerlink" title="Gson泛型使用"></a>Gson泛型使用</h1><p>Gson 为我们提供了 <code>TypeToken</code> 来实现对泛型的支持。</p>
+<h2 id="基本类型数据解析"><a href="#基本类型数据解析" class="headerlink" title="基本类型数据解析"></a>基本类型数据解析</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Gson gson = <span class="keyword">new</span> Gson();</div><div class="line">String jsonArray = <span class="string">"[\"Android\",\"Java\",\"PHP\"]"</span>;</div><div class="line">List&lt;String&gt; stringList = gson.fromJson(jsonArray,<span class="keyword">new</span> TypeToken&lt;List&lt;String&gt;&gt;()&#123;&#125;.getType());</div></pre></td></tr></table></figure>
+<h2 id="POJO的泛型数据解析"><a href="#POJO的泛型数据解析" class="headerlink" title="POJO的泛型数据解析"></a>POJO的泛型数据解析</h2><p>泛型的引入可以减少很多无关的代码，我们现在后台的数据接口数据主要有下面两类:<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    message : &#123;"code":0,"message":"操作成功"&#125;,</div><div class="line">    "data":&#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    message : &#123;"code":0,"message":"操作成功"&#125;,</div><div class="line">    "data":&#123;&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们真正需要的是 data 所包含的数据，message 中的数据我们只需要统一处理一次。如果我们不定义泛型那么我们就需要这样定义POJO。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserBean</span></span>&#123;</div><div class="line">    <span class="keyword">private</span> MessageBean message;</div><div class="line">    <span class="keyword">private</span> User data;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> MessageBean <span class="title">getMessage</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> message;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MessageBean</span> </span>&#123;</div><div class="line">        <span class="comment">/**</span></div><div class="line"><span class="comment">         * code : 0</span></div><div class="line"><span class="comment">         * message : 操作成功</span></div><div class="line"><span class="comment">         */</span></div><div class="line">        <span class="keyword">private</span> <span class="keyword">int</span> code;</div><div class="line">        <span class="keyword">private</span> String message;</div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getCode</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">return</span> code;</div><div class="line">        &#125;</div><div class="line">        <span class="function"><span class="keyword">public</span> String <span class="title">getMessage</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">return</span> message;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>定义成泛型，就会简洁很多<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Result</span>&lt;<span class="title">T</span>&gt;</span>&#123;</div><div class="line">    <span class="keyword">private</span> MessageBean message;</div><div class="line">    <span class="keyword">private</span> T data;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>然后我们只需编写data字段所对应的POJO即可，专注于我们的业务逻辑。</p>
+<p>解析数据的写法：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Type userType = <span class="keyword">new</span> TypeToken&lt;Result&lt;User&gt;&gt;()&#123;&#125;.getType();</div><div class="line">Result&lt;User&gt; userResult = gson.fromJson(json,userType);</div><div class="line">User user = userResult.data;</div></pre></td></tr></table></figure></p>
+<p>或<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Type userListType = <span class="keyword">new</span> TypeToken&lt;Result&lt;List&lt;User&gt;&gt;&gt;()&#123;&#125;.getType();</div><div class="line">Result&lt;List&lt;User&gt;&gt; userListResult = gson.fromJson(json,userListType);</div><div class="line">List&lt;User&gt; users = userListResult.data;</div></pre></td></tr></table></figure></p>
+<h1 id="Gson-流操作"><a href="#Gson-流操作" class="headerlink" title="Gson 流操作"></a>Gson 流操作</h1><p>Gson 的流操作是通过stream包下的JsonReader类和JsonWriter来实现的。</p>
+<h2 id="Gson-流反序列化"><a href="#Gson-流反序列化" class="headerlink" title="Gson 流反序列化"></a>Gson 流反序列化</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">String json = <span class="string">"&#123;\"name\":\"leo\",\"age\":\"28\"&#125;"</span>;</div><div class="line">User user = <span class="keyword">new</span> User();</div><div class="line">JsonReader reader = <span class="keyword">new</span> JsonReader(<span class="keyword">new</span> StringReader(json));</div><div class="line">reader.beginObject(); <span class="comment">// throws IOException</span></div><div class="line"><span class="keyword">while</span> (reader.hasNext()) &#123;</div><div class="line">    String s = reader.nextName();</div><div class="line">    <span class="keyword">switch</span> (s) &#123;</div><div class="line">        <span class="keyword">case</span> <span class="string">"name"</span>:</div><div class="line">            user.name = reader.nextString();</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">case</span> <span class="string">"age"</span>:</div><div class="line">            user.age = reader.nextInt(); </div><div class="line">            <span class="keyword">break</span>;</div><div class="line">        <span class="keyword">case</span> <span class="string">"email"</span>:</div><div class="line">            user.email = reader.nextString();</div><div class="line">            <span class="keyword">break</span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line">reader.endObject(); <span class="comment">// throws IOException</span></div></pre></td></tr></table></figure>
+<p>fromJson()方法实际上就是通过JsonReader来进行数据解析的，不信？ 去看源码喽~<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">fromJson</span><span class="params">(String json, Type typeOfT)</span> <span class="keyword">throws</span> JsonSyntaxException </span>&#123;</div><div class="line">    <span class="keyword">if</span> (json == <span class="keyword">null</span>) &#123;</div><div class="line">      <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">    &#125;</div><div class="line">    StringReader reader = <span class="keyword">new</span> StringReader(json);</div><div class="line">    T target = (T) fromJson(reader, typeOfT);</div><div class="line">    <span class="keyword">return</span> target;</div><div class="line">  &#125;</div></pre></td></tr></table></figure></p>
+<h2 id="Gson-流序列化"><a href="#Gson-流序列化" class="headerlink" title="Gson 流序列化"></a>Gson 流序列化</h2><p>序列化和反序列化始终是成对出现的，咱们这也不能让它落单不是。。。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">JsonWriter writer = <span class="keyword">new</span> JsonWriter(<span class="keyword">new</span> OutputStreamWriter(System.out));</div><div class="line">writer.beginObject() <span class="comment">// throws IOException</span></div><div class="line">        .name(<span class="string">"name"</span>).value(<span class="string">"leo"</span>)</div><div class="line">        .name(<span class="string">"age"</span>).value(<span class="number">28</span>)</div><div class="line">        .name(<span class="string">"email"</span>).nullValue() <span class="comment">//演示null</span></div><div class="line">        .endObject(); <span class="comment">// throws IOException</span></div><div class="line">writer.flush(); <span class="comment">// throws IOException</span></div></pre></td></tr></table></figure></p>
+<p>类似的，toJson() 方法自然是通过JsonWriter实现序列化<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> String <span class="title">toJson</span><span class="params">(Object src, Type typeOfSrc)</span> </span>&#123;</div><div class="line">    StringWriter writer = <span class="keyword">new</span> StringWriter();</div><div class="line">    toJson(src, typeOfSrc, writer);</div><div class="line">    <span class="keyword">return</span> writer.toString();</div><div class="line"> &#125;</div></pre></td></tr></table></figure></p>
+<hr>
+<p>author <a href="https://leopoldcrossing.github.io/" target="_blank" rel="external">@ygwang</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Gson/" rel="tag"># Gson</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/05/依赖注入框架 -- Dagger2 实践/" rel="next" title="依赖注入框架 -- Dagger2 实践">
+                <i class="fa fa-chevron-left"></i> 依赖注入框架 -- Dagger2 实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/17/Gson 正确使用姿势（二）/" rel="prev" title="Gson 正确打开姿势（二）">
+                Gson 正确打开姿势（二） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="jinhui-mobile">
+          <p class="site-author-name" itemprop="name">jinhui-mobile</p>
+           
+              <p class="site-description motion-element" itemprop="description">stay hungry stay foolish</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jhmobile/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Gson-基本用法"><span class="nav-number">1.</span> <span class="nav-text">Gson 基本用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本数据类型解析"><span class="nav-number">1.1.</span> <span class="nav-text">基本数据类型解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本数据类型生成"><span class="nav-number">1.2.</span> <span class="nav-text">基本数据类型生成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POJO类的生成与解析"><span class="nav-number">1.3.</span> <span class="nav-text">POJO类的生成与解析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#属性重命名"><span class="nav-number">2.</span> <span class="nav-text">属性重命名</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#SerializedName注解使用"><span class="nav-number">2.1.</span> <span class="nav-text">@SerializedName注解使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为POJO字段提供属性备选名"><span class="nav-number">2.2.</span> <span class="nav-text">为POJO字段提供属性备选名</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Gson泛型使用"><span class="nav-number">3.</span> <span class="nav-text">Gson泛型使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本类型数据解析"><span class="nav-number">3.1.</span> <span class="nav-text">基本类型数据解析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#POJO的泛型数据解析"><span class="nav-number">3.2.</span> <span class="nav-text">POJO的泛型数据解析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Gson-流操作"><span class="nav-number">4.</span> <span class="nav-text">Gson 流操作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Gson-流反序列化"><span class="nav-number">4.1.</span> <span class="nav-text">Gson 流反序列化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gson-流序列化"><span class="nav-number">4.2.</span> <span class="nav-text">Gson 流序列化</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jinhui-mobile</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

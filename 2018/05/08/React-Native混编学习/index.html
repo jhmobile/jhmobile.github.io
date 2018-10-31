@@ -1,0 +1,1288 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="金汇移动开发团队" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="React-Native混编学习本篇主要涉及的是App和RN的混合开发环境搭建，对于基本的RN环境搭建请自行查阅文档。 这里需要着重注意的是全局依赖：  node v8.1.3（nvm管理） react-native-cli 0.53.3(npm全局包) nrm(npm全局包，主要是为了管理npm源，切换npm源为taobao) gulp(npm全局包，主要是打包zip压缩)   最好的方式是使用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React-Native混编学习">
+<meta property="og:url" content="http://jhmobile.github.io/2018/05/08/React-Native混编学习/index.html">
+<meta property="og:site_name" content="金汇移动开发团队">
+<meta property="og:description" content="React-Native混编学习本篇主要涉及的是App和RN的混合开发环境搭建，对于基本的RN环境搭建请自行查阅文档。 这里需要着重注意的是全局依赖：  node v8.1.3（nvm管理） react-native-cli 0.53.3(npm全局包) nrm(npm全局包，主要是为了管理npm源，切换npm源为taobao) gulp(npm全局包，主要是打包zip压缩)   最好的方式是使用">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-05-08T06:17:14.151Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React-Native混编学习">
+<meta name="twitter:description" content="React-Native混编学习本篇主要涉及的是App和RN的混合开发环境搭建，对于基本的RN环境搭建请自行查阅文档。 这里需要着重注意的是全局依赖：  node v8.1.3（nvm管理） react-native-cli 0.53.3(npm全局包) nrm(npm全局包，主要是为了管理npm源，切换npm源为taobao) gulp(npm全局包，主要是打包zip压缩)   最好的方式是使用">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jhmobile.github.io/2018/05/08/React-Native混编学习/">
+
+
+
+
+
+  <title> React-Native混编学习 | 金汇移动开发团队 </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">金汇移动开发团队</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">技术博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-admin">
+          <a href="/admin" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            管理
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://jhmobile.github.io/2018/05/08/React-Native混编学习/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jinhui-mobile">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="金汇移动开发团队">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                React-Native混编学习
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-08T14:11:36+08:00">
+                2018-05-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="React-Native混编学习"><a href="#React-Native混编学习" class="headerlink" title="React-Native混编学习"></a>React-Native混编学习</h1><p>本篇主要涉及的是App和RN的混合开发环境搭建，对于基本的RN环境搭建请自行查阅<a href="https://reactnative.cn/docs/0.51/getting-started.html" target="_blank" rel="external">文档</a>。</p>
+<p>这里需要着重注意的是全局依赖：</p>
+<ul>
+<li>node v8.1.3（nvm管理）</li>
+<li>react-native-cli 0.53.3(npm全局包)</li>
+<li>nrm(npm全局包，主要是为了管理npm源，切换npm源为taobao)</li>
+<li>gulp(npm全局包，主要是打包zip压缩)</li>
+</ul>
+<blockquote>
+<p>最好的方式是使用react-native init生成一个新的RN项目，参考它的package.json依赖。这里我使用的是<code>&quot;react&quot;: &quot;16.2.0&quot;</code> <code>&quot;react-native&quot;: &quot;0.53.3&quot;</code></p>
+</blockquote>
+<h2 id="APP配合"><a href="#APP配合" class="headerlink" title="APP配合"></a>APP配合</h2><ul>
+<li>环境搭建<ul>
+<li>依赖如何引入</li>
+</ul>
+</li>
+<li>接口定义<ul>
+<li>获取当前用户信息</li>
+<li>获取当前环境状态</li>
+<li>结束RN activity</li>
+<li>路由跳转结构定义（互相跳转的接口）</li>
+</ul>
+</li>
+<li>RN热更部分完善（Android和iOS）<ul>
+<li>资源包地址重定义</li>
+<li>热更代码完善</li>
+</ul>
+</li>
+<li>RN开发调试<ul>
+<li>兼容开发环境，方便我们调试（Bundle地址，开发模式启动）</li>
+</ul>
+</li>
+<li>打包脚本修改<ul>
+<li>依赖如何注入</li>
+<li>编译问题解决</li>
+</ul>
+</li>
+<li>部分常量配置<ul>
+<li>RN服务地址常量</li>
+<li>RN主组件名称</li>
+<li>Bundle地址</li>
+</ul>
+</li>
+<li>RN路由定义</li>
+<li>登陆验证问题</li>
+</ul>
+<h2 id="android环境搭建"><a href="#android环境搭建" class="headerlink" title="android环境搭建"></a>android环境搭建</h2><h3 id="基础部分"><a href="#基础部分" class="headerlink" title="基础部分"></a>基础部分</h3><ul>
+<li>RNApp嵌入原生</li>
+<li>原生跳转RN路由</li>
+<li>原生和RN的通信</li>
+<li>RN资源管理</li>
+<li>RN开发调试</li>
+<li>其他问题<ul>
+<li>原生加载RN白屏问题</li>
+<li>回退问题</li>
+</ul>
+</li>
+</ul>
+<h3 id="RNApp嵌入原生"><a href="#RNApp嵌入原生" class="headerlink" title="RNApp嵌入原生"></a>RNApp嵌入原生</h3><h4 id="1-依赖引入"><a href="#1-依赖引入" class="headerlink" title="1. 依赖引入"></a>1. 依赖引入</h4><p>引入<code>node_modules/react-native/android</code></p>
+<ul>
+<li><p>主build.gradle 添加</p>
+<pre><code>maven {
+    // All of React Native (JS, Android binaries) is installed from npm
+    url &quot;$rootDir/../node_modules/react-native/android&quot;
+}
+</code></pre></li>
+<li>app/build.gradle 添加 <code>compile &quot;com.facebook.react:react-native:0.53.3&quot;</code><blockquote>
+<p>后需改为我们的android包管理</p>
+</blockquote>
+</li>
+</ul>
+<h4 id="2-MyApplication类继承ReactApplication"><a href="#2-MyApplication类继承ReactApplication" class="headerlink" title="2. MyApplication类继承ReactApplication"></a>2. MyApplication类继承ReactApplication</h4><ul>
+<li>onCreate中添加<code>SoLoader.init(this, false);</code></li>
+<li><p>Override <code>public ReactNativeHost getReactNativeHost() {
+  return mReactNativeHost;
+}</code>代码如下：</p>
+<pre><code>private final ReactNativeHost mReactNativeHost = new ReactNativeHost(this) {
+  @Nullable
+  @Override
+  protected String getJSBundleFile() { // 定义RN Bundle文件地址
+    return super.getJSBundleFile(); // 默认地址为assets/index.android.bundle
+  }
+
+  @Override
+  public boolean getUseDeveloperSupport() { // 定义DEBUG模式
+      return BuildConfig.DEBUG;
+  }
+
+  @Override
+  protected List&lt;ReactPackage&gt; getPackages() { // RN包载入
+      return Arrays.&lt;ReactPackage&gt;asList(
+              new MainReactPackage(),
+              new CommPackage(); // 载入公共包，见原生和RN通信
+      );
+  }
+};
+</code></pre></li>
+</ul>
+<blockquote>
+<p>后需重新定义Bundle文件地址，使之能够热更。</p>
+</blockquote>
+<h4 id="3-RNActivity编写"><a href="#3-RNActivity编写" class="headerlink" title="3. RNActivity编写"></a>3. RNActivity编写</h4><pre><code>public class MyReactActivity extends ReactActivity {
+
+  public Bundle getBundle() { // 获取props入参
+      return getIntent().getExtras();
+  }
+
+  protected @Nullable String getMainComponentName() { // 定义RN组件名称
+      return &quot;MyReactNativeApp&quot;;
+  }
+
+  @Override
+  protected ReactActivityDelegate createReactActivityDelegate() { // 通过getLaunchOptions传值
+      return new ReactActivityDelegate(this, getMainComponentName()) { 
+          @Nullable
+          @Override
+          protected Bundle getLaunchOptions() {
+              return getBundle();
+          }
+      };
+  }
+</code></pre><p>  }</p>
+<p>至此，通过startActivity就能够正常打开一个RNApp了。</p>
+<h3 id="原生跳转RN路由"><a href="#原生跳转RN路由" class="headerlink" title="原生跳转RN路由"></a>原生跳转RN路由</h3><p>这里跳转可以有很多方式，不过最根本的是如何通过原生将要跳转的路由传递给RN。<br>主要分为两大类方式：（见本篇原生和RN通信）</p>
+<ul>
+<li>主动传递</li>
+<li>被动传递</li>
+</ul>
+<p>这里我采用的是主动传递中的Props传递。</p>
+<p>在原生开启RNApp的时候，可以传递一个Bundle作为最初的Props，路由及部分参数信息通过这个Bundle带给RN。</p>
+<p><strong>Android部分</strong></p>
+<ul>
+<li><p>ReactActivityDelegate类</p>
+<pre><code>protected void loadApp(String appKey) {
+  if (mReactRootView != null) {
+    throw new IllegalStateException(&quot;Cannot loadApp while app is already running.&quot;);
+  }
+  mReactRootView = createRootView();
+  mReactRootView.startReactApplication(
+    getReactNativeHost().getReactInstanceManager(),
+    appKey,
+    getLaunchOptions()); // 在这里有个getLaunchOptions方法，就是传递Bundle的地方
+  getPlainActivity().setContentView(mReactRootView);
+}
+
+protected @Nullable Bundle getLaunchOptions() {
+  return null;
+}
+</code></pre></li>
+<li>MyReactActivity类<br>我们这里通过在MyReactActivity类里重载getLaunchOptions方法，传递Bundle（参考RNApp嵌入原生代码）</li>
+</ul>
+<p><strong>RN部分</strong><br>  RN这里采用了<code>react-native-router-flux</code>作为路由管理插件。这里需要注意的是版本问题，测试发现<code>&quot;react-native-router-flux&quot;: &quot;^4.0.0-beta.25&quot;</code>， <code>&quot;react-navigation&quot;: &quot;^1.0.0-beta.22&quot;</code>可用。</p>
+<p>相关代码如下：</p>
+<pre><code>import React from &apos;react&apos;;
+import { Router, Scene, Actions } from &apos;react-native-router-flux&apos;;
+import { getUserInfo, finishActivity } from &apos;./communication&apos;
+
+import PageOne from &apos;./modules/PageOne&apos;
+import PageTwo from &apos;./modules/PageTwo&apos;
+import PageThree from &apos;./modules/PageThree&apos;
+import PageFour from &apos;./modules/PageFour&apos;
+
+export default class App extends React.Component {
+  constructor(props) {
+    super(props);
+    console.log(&quot;RN启动&quot;);
+  }
+
+  componentDidMount(){
+    const rnKey = this.props.rnKey || &quot;PageOne&quot;;
+    Actions.reset(rnKey, this.props);
+  }
+
+  // 导航栏回退方法
+  onBack () {
+    let popRouter = Actions.pop();
+    !popRouter &amp;&amp; finishActivity();
+  }
+
+  render() {
+    return (
+      &lt;Router&gt;
+        &lt;Scene key=&quot;root&quot; hideNavBar={true}&gt;
+          &lt;Scene key=&quot;PageOne&quot; back={true} hideNavBar={false} component={PageOne} title=&quot;PageOne&quot; onBack={() =&gt; this.onBack()}/&gt;
+          &lt;Scene key=&quot;PageTwo&quot; back={true} hideNavBar={false} component={PageTwo} title=&quot;PageTwo&quot; onBack={() =&gt; this.onBack()}/&gt;
+
+          {/* 用户信息获取，用户已登陆 */}
+          &lt;Scene key=&quot;PageThree&quot; back={true} hideNavBar={false} component={PageThree} title=&quot;PageThree&quot; onBack={() =&gt; this.onBack()}/&gt;
+          &lt;Scene key=&quot;PageFour&quot; back={true} hideNavBar={false} component={PageFour} title=&quot;PageFour&quot; onBack={() =&gt; this.onBack()}/&gt;
+        &lt;/Scene&gt;
+      &lt;/Router&gt;
+    )
+  }
+}
+</code></pre><h3 id="原生和RN的通信"><a href="#原生和RN的通信" class="headerlink" title="原生和RN的通信"></a>原生和RN的通信</h3><p>上面说道通信分为两种，主动传递和被动传递。这里的主动/被动是以原生为参照。具体的可以参考<a href="https://reactnative.cn/docs/0.51/communication-android.html#content" target="_blank" rel="external">和原生端通信</a>，这里只贴关键部分的代码。如下：</p>
+<p><strong>Android部分</strong></p>
+<ul>
+<li><p>Package类</p>
+<pre><code>package xxx;
+
+import com.facebook.react.ReactPackage;
+import com.facebook.react.bridge.NativeModule;
+import com.facebook.react.bridge.ReactApplicationContext;
+import com.facebook.react.uimanager.ViewManager;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class CommPackage implements ReactPackage {
+    public CommModule mModule;
+
+    /**
+    * 创建Native Module
+    * @param reactContext
+    * @return
+    */
+    @Override
+    public List&lt;NativeModule&gt; createNativeModules(ReactApplicationContext reactContext) {
+        List&lt;NativeModule&gt; modules = new ArrayList&lt;&gt;();
+        mModule = new CommModule(reactContext);
+        modules.add(mModule);
+        return modules;
+    }
+
+    @Override
+    public List&lt;ViewManager&gt; createViewManagers(ReactApplicationContext reactContext) {
+        return Collections.emptyList();
+    }
+}
+</code></pre></li>
+<li><p>module类</p>
+<pre><code>public class CommModule extends ReactContextBaseJavaModule {
+
+    private ReactApplicationContext mContext;
+    public static final String MODULE_NAME = &quot;commModule&quot;;
+    public static final String EVENT_NAME = &quot;nativeCallRn&quot;;
+    public static final String EVENT_NAME1 = &quot;getPatchImgs&quot;;
+    /**
+    * 构造方法必须实现
+    * @param reactContext
+    */
+    public CommModule(ReactApplicationContext reactContext) {
+        super(reactContext);
+        this.mContext = reactContext;
+    }
+
+    /** 主动传递
+    * Native调用RN
+    * @param msg
+    */
+    public void nativeCallRn(String msg) {
+        mContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
+                .emit(EVENT_NAME,msg);
+    }
+
+    /**
+    * Callback 方式
+    * rn调用Native,并获取返回值
+    * @param msg
+    * @param callback
+    */
+    @ReactMethod
+    public void rnCallNativeFromCallback(String msg, Callback callback) {
+
+        // 1.处理业务逻辑...
+        String result = &quot;处理结果：&quot; + msg;
+        // 2.回调RN,即将处理结果返回给RN
+        callback.invoke(result);
+    }
+
+    /**
+    * Promise
+    * @param msg
+    * @param promise
+    */
+    @ReactMethod
+    public void rnCallNativeFromPromise(String msg, Promise promise) {
+
+        Log.e(&quot;---&quot;,&quot;adasdasda&quot;);
+        // 1.处理业务逻辑...
+        String result = &quot;处理结果：&quot; + msg;
+        // 2.回调RN,即将处理结果返回给RN
+        promise.resolve(result);
+    }
+
+    /**
+    * 向RN传递常量
+    */
+    @Nullable
+    @Override
+    public Map&lt;String, Object&gt; getConstants() {
+        Map&lt;String,Object&gt; params = new HashMap&lt;&gt;();
+        params.put(&quot;Constant&quot;,&quot;我是常量，传递给RN&quot;);
+        return params;
+    }
+
+    @ReactMethod
+    public void startActivityFromJS(String path, ReadableMap params){
+        try{
+            Activity currentActivity = getCurrentActivity();
+
+            if(null!=currentActivity){
+                Map intentParams = ((ReadableNativeMap) params).toHashMap();
+
+                &lt;!--startActivity--&gt;
+            }
+        }catch(Exception e){
+            throw new JSApplicationIllegalArgumentException(
+                    &quot;不能打开Activity : &quot;+e.getMessage());
+        }
+    }
+
+    @ReactMethod
+    public void dataToJS(Callback successBack, Callback errorBack){
+        try{
+            Activity currentActivity = getCurrentActivity();
+            String result = currentActivity.getIntent().getStringExtra(&quot;data&quot;);
+
+            successBack.invoke(result);
+        }catch (Exception e){
+            errorBack.invoke(e.getMessage());
+        }
+    }
+}
+</code></pre></li>
+</ul>
+<p>最后在MyApplication中注入，查看上面嵌入RNApp部分的【载入公共包，见原生和RN通信】注释。</p>
+<p><strong>RN部分</strong><br>RN部分正常引用调用就好，代码如下：</p>
+<pre><code>import { NativeModules } from &apos;react-native&apos;;
+
+const { commModule } = NativeModules;
+
+export function startActivity (appPath, params = {}) {
+  if(appPath) {
+    commModule.startActivityFromJS(appPath, params);
+  }
+}
+
+export function finishActivity () {
+  commModule.activityFinish();
+}
+
+export function getUserInfo() {
+  return commModule.getUserInfo()
+}
+
+export function getEnv() {}
+
+// test
+export function rnCallNativeFromCallback(msg, callback) {
+  commModule.rnCallNativeFromCallback(msg, callback);
+}
+
+export function rnCallNativeFromPromise(msg) {
+  return commModule.rnCallNativeFromPromise(msg);
+}
+
+export function getConstans() {
+  console.log(commModule.test)
+}
+</code></pre><h3 id="RN资源管理"><a href="#RN资源管理" class="headerlink" title="RN资源管理"></a>RN资源管理</h3><p>测试发现如果将打包的Bundle文件和资源文件放到统一目录下，就可以正常引用资源。<br>参考命令<code>react-native bundle --platform android --dev false  --entry-file index.js  --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/assets</code></p>
+<p>有需要做热更的可以将资源放到SD卡中，只需要指定以下Bundle文件路径，将资源和Bundle文件放到一起就好。</p>
+<h3 id="RN开发调试"><a href="#RN开发调试" class="headerlink" title="RN开发调试"></a>RN开发调试</h3><p>这里只说我的调试方式，更详细的请查阅<a href="https://reactnative.cn/docs/0.51/debugging.html#content" target="_blank" rel="external">调试文档</a>。</p>
+<ol>
+<li>在<code>AndroidManifest.xml</code>中添加<code>&lt;activity android:name=&quot;com.facebook.react.devsupport.DevSettingsActivity&quot; /&gt;</code>启用调试模式。</li>
+<li>通过<code>npm start</code>启动RN服务，即<code>node node_modules/react-native/local-cli/cli.js start</code>。</li>
+<li>真机安装APP进入RNApp界面，摇动手机可以打开开发者列表，通过设置Dev Host可以连接RN服务。Reload可以重载RNApp。</li>
+<li>通过在Android Studio输出中检索React可以查看RN的输出（包括console）。</li>
+</ol>
+<blockquote>
+<p>这里的调试基于HOST Bundle获取方式上，也就是说你的Bundle获取地址应当是默认的<code>super.getJSBundleFile()</code>。</p>
+</blockquote>
+<h3 id="其他问题"><a href="#其他问题" class="headerlink" title="其他问题"></a>其他问题</h3><ol>
+<li><p>原生加载RN白屏问题<br>白屏是因为加载Bundle文件过慢导致的，这个网上有很多的解释了。这里我的解决办法是在App开启动画的Activity里执行了一次加载。</p>
+<pre><code>private void preLoadReactNative() {
+    // 1.创建ReactRootView
+    ReactRootView rootView = new ReactRootView(this);
+    rootView.startReactApplication(
+            ((ReactApplication) getApplication()).getReactNativeHost().getReactInstanceManager(),
+            &quot;MyReactNativeApp&quot;,
+            null);
+}
+</code></pre></li>
+<li><p>返回按键问题<br>这里的返回键分为两种，一种是手机硬件后退按键，另一种是导航栏后退按键。手机后退这里无需做处理,导航栏后退如下处理：</p>
+<ul>
+<li><p>RN</p>
+<pre><code>onBack () {
+  let popRouter = Actions.pop();
+  !popRouter &amp;&amp; finishActivity(); // 判断是否为RN首页，返回原生上个页面。
+}
+</code></pre></li>
+<li><p>原生见本篇<code>finishActivity</code>方法。</p>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>部分代码参考<a href="https://github.com/songxiaoliang/ReactNativeApp" target="_blank" rel="external">ReactNativeApp</a>项目</strong></p>
+<h2 id="iOS环境搭建"><a href="#iOS环境搭建" class="headerlink" title="iOS环境搭建"></a>iOS环境搭建</h2><p>基于Android环境搭建，iOS部署大同小异，这里仅介绍不同的部分。</p>
+<h3 id="依赖安装"><a href="#依赖安装" class="headerlink" title="依赖安装"></a>依赖安装</h3><p>修改Podfile，添加如下内容：(环境配置参考<a href="https://reactnative.cn/docs/0.51/integration-with-existing-apps.html#content" target="_blank" rel="external">集成到现有原生应用</a>)</p>
+<pre><code># &apos;node_modules&apos;目录一般位于根目录中
+# 但是如果你的结构不同，那你就要根据实际路径修改下面的`:path`
+pod &apos;React&apos;, :path =&gt; &apos;../node_modules/react-native&apos;, :subspecs =&gt; [
+    &apos;Core&apos;,
+    &apos;CxxBridge&apos;, # 如果RN版本 &gt;= 0.45则加入此行
+    &apos;DevSupport&apos;, # 如果RN版本 &gt;= 0.43，则需要加入此行才能开启开发者菜单
+    # 这里注意一下!!!添加这些解决react-navigation的native module not be null的问题
+    &apos;ART&apos;,
+    &apos;RCTActionSheet&apos;,
+    &apos;RCTGeolocation&apos;,
+    &apos;RCTImage&apos;,
+    &apos;RCTNetwork&apos;,
+    &apos;RCTPushNotification&apos;,
+    &apos;RCTSettings&apos;,
+    &apos;RCTText&apos;,
+    &apos;RCTVibration&apos;,
+    &apos;RCTWebSocket&apos;, # 这个模块是用于调试功能的
+    &apos;RCTLinkingIOS&apos;,
+]
+# 如果你的RN版本 &gt;= 0.42.0，则加入下面这行
+pod &quot;yoga&quot;, :path =&gt; &quot;../node_modules/react-native/ReactCommon/yoga&quot;
+
+# 如果RN版本 &gt;= 0.45则加入下面三个第三方编译依赖
+pod &apos;DoubleConversion&apos;, :podspec =&gt; &apos;../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec&apos;
+pod &apos;GLog&apos;, :podspec =&gt; &apos;../node_modules/react-native/third-party-podspecs/GLog.podspec&apos; // 这里修改glog为GLog
+pod &apos;Folly&apos;, :podspec =&gt; &apos;../node_modules/react-native/third-party-podspecs/Folly.podspec&apos;
+
+end
+</code></pre><p>然后运行pod install安装依赖</p>
+<blockquote>
+<p>这里是离线的包，怎么去合并到打包流程？（可以通过npm install去解决，不过比较麻烦）</p>
+</blockquote>
+<h3 id="RNApp嵌入原生-1"><a href="#RNApp嵌入原生-1" class="headerlink" title="RNApp嵌入原生"></a>RNApp嵌入原生</h3><p>和安卓一样，需要写一个类似于activity的壳子供给RN。</p>
+<p><strong>ReactView.h</strong></p>
+<pre><code>#import &lt;Foundation/Foundation.h&gt;
+
+@interface ReactView : UIViewController
+
+@end
+</code></pre><p><strong>ReactView.m</strong></p>
+<pre><code>#import &quot;ReactView.h&quot;
+#import &lt;React/RCTRootView.h&gt;
+#import &lt;React/RCTBridgeModule.h&gt;
+#import &quot;commModule.h&quot; # 这里是RN和原生交互所需要的一些方法，可先去掉
+
+@interface ReactView()&lt;UINavigationBarDelegate&gt;
+@end
+@implementation ReactView
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+
+    # 这里的http和localhost要给一下权限
+    NSString * strUrl = @&quot;http://localhost:8081/index.bundle?platform=ios&amp;dev=true&quot;;    
+    NSURL * jsCodeLocation = [NSURL URLWithString:strUrl];
+
+    # 除http之外，和安卓一样，也可以通过bundle
+    RCTRootView * rootView = [[RCTRootView alloc] 
+                                initWithBundleURL:jsCodeLocation
+                                moduleName:@&quot;MyReactNativeApp&quot;
+                                initialProperties:nil
+                                launchOptions:nil];
+    self.view = rootView;
+}
+
+#pragma mark - 导航条处理，取消RN的导航栏
+- (void)navigationController:(UINavigationController *)navigationController willShowViewController:(UIViewController *)viewController animated:(BOOL)animated {
+    [navigationController setNavigationBarHidden:YES animated:YES];
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+@end
+</code></pre><p><strong>Bundle地址重定义</strong></p>
+<pre><code>NSString *cachePath = @&quot;XXX&quot;;
+cachePath = [cachePath stringByAppendingPathComponent:@&quot;index.ios.bundle&quot;];
+NSURL *jsCodeLocation = [NSURL URLWithString:cachePath];
+</code></pre><p>中间遇到了几个编译问题导致build失败。问题与解决方法如下：</p>
+<ul>
+<li><p><a href="https://stackoverflow.com/questions/48705250/react-native-ios-could-not-build-module-yoga-algorithm-file-not-found" target="_blank" rel="external">React Native iOS: Could not build module ‘yoga’: ‘algorithm’ file not found</a></p>
+</li>
+<li><p>RCTReconnectingWebSocket.h文件的#import <fishhook fishhook.h=""> 显示error: ‘fishhook/fishhook.h’ file not found</fishhook></p>
+<pre><code>&quot;scripts&quot;: {
+    &quot;postinstall&quot;: &quot;sed -i &apos;&apos; &apos;s#&lt;fishhook/fishhook.h&gt;#\&quot;fishhook.h\&quot;#g&apos; ./node_modules/react-native/Libraries/WebSocket/RCTReconnectingWebSocket.m&quot;
+}
+</code></pre></li>
+<li>resolveRCTValueAnimatedNode<br>  <code>sed -i &#39;&#39; &#39;s/#import &lt;RCTAnimation\\/RCTValueAnimatedNode.h&gt;/#import \&quot;RCTValueAnimatedNode.h\&quot;/&#39; ./node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedNodesManager.h</code></li>
+</ul>
+<p>这样配个正常的iOS跳转地址，就可以正常跳转到RN了。这里的RN界面最好用一件简单的hello world测试下。</p>
+<blockquote>
+<p>编译问题怎么合到打包代码中？</p>
+</blockquote>
+<h3 id="原生和RN的通信-1"><a href="#原生和RN的通信-1" class="headerlink" title="原生和RN的通信"></a>原生和RN的通信</h3><p>通信一样是原生提供一下方法，可供给RN调用，直接上代码。</p>
+<p><strong>commModule.h</strong></p>
+<pre><code>#import &lt;Foundation/Foundation.h&gt;
+#import &lt;React/RCTBridgeModule.h&gt;
+
+@interface commModule : NSObject &lt;RCTBridgeModule&gt;
+
+@end
+</code></pre><p><strong>commModule.m</strong></p>
+<pre><code>#import &quot;commModule.h&quot;
+#import &lt;React/RCTConvert.h&gt;
+
+@implementation commModule
+
+RCT_EXPORT_MODULE();
+
+RCT_EXPORT_METHOD(rnCallNativeFromCallback:(NSString *)msg callback:(RCTResponseSenderBlock)callback)
+{
+    NSString *result = [@&quot;处理结果:&quot; stringByAppendingString:msg];
+    callback(@[[NSNull null], result]);
+}
+
+RCT_REMAP_METHOD(rnCallNativeFromPromise, msg:(NSString *)msg
+                findEventsWithResolver:(RCTPromiseResolveBlock)resolve
+                rejecter:(RCTPromiseRejectBlock)reject)
+{
+    NSString *result = [@&quot;处理结果:&quot; stringByAppendingString:msg];
+    resolve(result);
+}
+
+RCT_REMAP_METHOD(getUserInfo, msg:(NSDictionary *)msg
+                resolver:(RCTPromiseResolveBlock)resolve
+                rejecter:(RCTPromiseRejectBlock)reject)
+{
+
+    resolve(@{@&quot;name&quot;: @&quot;iOS&quot;});
+}
+
+RCT_EXPORT_METHOD(startActivityFromJS:(NSString *)path params:(NSDictionary *)params)
+{
+    # 路由跳转，注意UI主线程
+}
+
+RCT_EXPORT_METHOD(activityFinish)
+{
+    # 结束RN finish，注意UI主线程
+}
+
+- (NSDictionary *)getConstants
+{
+    int n = arc4random_uniform(100);
+    return @{ @&quot;test&quot;: @&quot;test&quot; };
+}
+
+@end
+</code></pre><p>这样就可以在RN端调用了，调用方法和Android一样。</p>
+<h3 id="RN资源管理-1"><a href="#RN资源管理-1" class="headerlink" title="RN资源管理"></a>RN资源管理</h3><p>测试发现如果将打包的Bundle文件和资源文件放到统一目录下，就可以正常引用资源。<br>参考命令<code>react-native bundle --platform ios --dev false  --entry-file index.ios.js  --bundle-output ReactNative/ios/index.ios.bundle --assets-dest ReactNative/ios</code></p>
+<p>有需要做热更的可以指定以下Bundle文件路径，将资源和Bundle文件放到一起就好。</p>
+<h3 id="RN开发调试-1"><a href="#RN开发调试-1" class="headerlink" title="RN开发调试"></a>RN开发调试</h3><p>这里只说我的调试方式，更详细的请查阅<a href="https://reactnative.cn/docs/0.51/debugging.html#content" target="_blank" rel="external">调试文档</a>。</p>
+<ol>
+<li>通过<code>initWithBundleURL</code>方式连接本地RN服务</li>
+<li>通过<code>npm start</code>启动RN服务，即<code>node node_modules/react-native/local-cli/cli.js start</code>。</li>
+<li>command + R可以在RN界面Reload RN</li>
+<li>通过在Xcode输出中检索React可以查看RN的输出（包括console）。</li>
+</ol>
+<h2 id="遗留问题"><a href="#遗留问题" class="headerlink" title="遗留问题"></a>遗留问题</h2><ul>
+<li>android项目依赖maven <code>{ url &quot;$rootDir/../node_modules/react-native/android&quot; }</code></li>
+<li>iOS项目依赖怎么合并到打包脚本中</li>
+<li>iOS编译问题如何在流程中解决</li>
+<li>登陆验证问题</li>
+</ul>
+<h2 id="资源地址"><a href="#资源地址" class="headerlink" title="资源地址"></a>资源地址</h2><p>服务器172.16.192.249/mobile_node/魏晓峰/RN</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/25/ESLint入门与实践初步/" rel="next" title="ESLint入门与实践初步">
+                <i class="fa fa-chevron-left"></i> ESLint入门与实践初步
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/31/React-Native-iOS本地私有库实践/" rel="prev" title="React Native iOS本地私有库实践">
+                React Native iOS本地私有库实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="jinhui-mobile">
+          <p class="site-author-name" itemprop="name">jinhui-mobile</p>
+           
+              <p class="site-description motion-element" itemprop="description">stay hungry stay foolish</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jhmobile/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#React-Native混编学习"><span class="nav-number">1.</span> <span class="nav-text">React-Native混编学习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#APP配合"><span class="nav-number">1.1.</span> <span class="nav-text">APP配合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#android环境搭建"><span class="nav-number">1.2.</span> <span class="nav-text">android环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基础部分"><span class="nav-number">1.2.1.</span> <span class="nav-text">基础部分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RNApp嵌入原生"><span class="nav-number">1.2.2.</span> <span class="nav-text">RNApp嵌入原生</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-依赖引入"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">1. 依赖引入</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-MyApplication类继承ReactApplication"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">2. MyApplication类继承ReactApplication</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-RNActivity编写"><span class="nav-number">1.2.2.3.</span> <span class="nav-text">3. RNActivity编写</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原生跳转RN路由"><span class="nav-number">1.2.3.</span> <span class="nav-text">原生跳转RN路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原生和RN的通信"><span class="nav-number">1.2.4.</span> <span class="nav-text">原生和RN的通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RN资源管理"><span class="nav-number">1.2.5.</span> <span class="nav-text">RN资源管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RN开发调试"><span class="nav-number">1.2.6.</span> <span class="nav-text">RN开发调试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他问题"><span class="nav-number">1.2.7.</span> <span class="nav-text">其他问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#iOS环境搭建"><span class="nav-number">1.3.</span> <span class="nav-text">iOS环境搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#依赖安装"><span class="nav-number">1.3.1.</span> <span class="nav-text">依赖安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RNApp嵌入原生-1"><span class="nav-number">1.3.2.</span> <span class="nav-text">RNApp嵌入原生</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原生和RN的通信-1"><span class="nav-number">1.3.3.</span> <span class="nav-text">原生和RN的通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RN资源管理-1"><span class="nav-number">1.3.4.</span> <span class="nav-text">RN资源管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RN开发调试-1"><span class="nav-number">1.3.5.</span> <span class="nav-text">RN开发调试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#遗留问题"><span class="nav-number">1.4.</span> <span class="nav-text">遗留问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#资源地址"><span class="nav-number">1.5.</span> <span class="nav-text">资源地址</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jinhui-mobile</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

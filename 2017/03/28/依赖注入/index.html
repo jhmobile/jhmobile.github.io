@@ -1,0 +1,780 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="依赖注入,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="金汇移动开发团队" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="前言先来一段看似比较装逼的介绍。在软件工程领域，依赖注入（Dependency Injection）是用于实现控制反转（Inversion of Control）的最常见的方式之一。本文主要介绍依赖注入原理和常见的实现方式">
+<meta name="keywords" content="依赖注入">
+<meta property="og:type" content="article">
+<meta property="og:title" content="依赖注入">
+<meta property="og:url" content="http://jhmobile.github.io/2017/03/28/依赖注入/index.html">
+<meta property="og:site_name" content="金汇移动开发团队">
+<meta property="og:description" content="前言先来一段看似比较装逼的介绍。在软件工程领域，依赖注入（Dependency Injection）是用于实现控制反转（Inversion of Control）的最常见的方式之一。本文主要介绍依赖注入原理和常见的实现方式">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-09-05T01:48:23.231Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="依赖注入">
+<meta name="twitter:description" content="前言先来一段看似比较装逼的介绍。在软件工程领域，依赖注入（Dependency Injection）是用于实现控制反转（Inversion of Control）的最常见的方式之一。本文主要介绍依赖注入原理和常见的实现方式">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jhmobile.github.io/2017/03/28/依赖注入/">
+
+
+
+
+
+  <title> 依赖注入 | 金汇移动开发团队 </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">金汇移动开发团队</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">技术博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-admin">
+          <a href="/admin" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            管理
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://jhmobile.github.io/2017/03/28/依赖注入/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jinhui-mobile">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="金汇移动开发团队">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                依赖注入
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-28T11:25:48+08:00">
+                2017-03-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>先来一段看似比较装逼的介绍。在软件工程领域，依赖注入（Dependency Injection）是用于实现控制反转（Inversion of Control）的最常见的方式之一。本文主要介绍依赖注入原理和常见的实现方式</p>
+<a id="more"></a>
+<h1 id="依赖注入的作用"><a href="#依赖注入的作用" class="headerlink" title="依赖注入的作用"></a>依赖注入的作用</h1><p>控制反转用于解耦，解的究竟是什么？<br>引用一下 Martin Flower在介绍注入时使用的部分代码说明这个问题。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MovieLister</span></span>&#123;</div><div class="line">    <span class="keyword">private</span> MovieFinder finder；</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MovieLister</span><span class="params">()</span></span>&#123;</div><div class="line">        finder = <span class="keyword">new</span> MovieFinderImpl();</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">public</span> Movie[] moviesDirectedBy(String arg)&#123;</div><div class="line">        List allMovies = finder.findAll();</div><div class="line">        <span class="keyword">for</span>(Iterator it = allMovies.iterator(); it.hasNext();)&#123;</div><div class="line">            Movie movie = (Movie)it.next();</div><div class="line">            <span class="keyword">if</span>(!movie.getDirector().equals(arg)) it.remove();</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> (Movie[]) allMovies.toArray(<span class="keyword">new</span> Movie[allMovies.size()]);</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">MovieFinder</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">findAll</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>脑补一下这段代码的功能：</p>
+<ul>
+<li>MovieLister的类来提供需要的电影列表，依赖于MovieFinder对象</li>
+<li>movieDirectedBy方法根据导演名来筛选电影</li>
+<li>MovieFinder接口的实现类MovieFinderImpl负责与数据库交互，搜索电影</li>
+</ul>
+<p>目前看来，我们完美的实现了功能！然而，我们都晓得，需求是无时无刻不在改变的~😭，现在我们需要将finder的实现改变（比如增加一个参数）。那我们就需要修改多个类。</p>
+<p>这就是依赖注入需要处理的耦合。这种在MovieLister中创建MovieFinderImpl的方式，是的MovieLister不仅仅依赖MovieFinder接口，还依赖于MovieFinderImpl这个实现。这种在一个类中，直接创建另一个累的对象的代码，我们称之为hard init , 它是有毒的：</p>
+<ul>
+<li>修改实现时，我们需要修改new Object的代码</li>
+<li>不便于测试，上文中的MovieLister无法单独被测试，其行为和MovieFinderImpl紧紧耦合在一起。</li>
+</ul>
+<h1 id="依赖注入的实现方式"><a href="#依赖注入的实现方式" class="headerlink" title="依赖注入的实现方式"></a>依赖注入的实现方式</h1><p>其实我们在平常的工作过程中，会经常使用依赖注入，只不过很少注意（反正我是。。。），也不太注意使用依赖注入进行解耦。我们在这里介绍一下依赖注入实现的三种方式。</p>
+<h2 id="构造函数注入（Contructor-Injection）"><a href="#构造函数注入（Contructor-Injection）" class="headerlink" title="构造函数注入（Contructor Injection）"></a>构造函数注入（Contructor Injection）</h2><p>在类的外面创建对象，然后通过构造方法传入。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// 构造函数注入，MovieLister类就只依赖于我们定义的MovieFinder接口</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MovieLister</span></span>&#123;</div><div class="line">    <span class="keyword">private</span> MovieFinder finder;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MovieLister</span><span class="params">(MovieFinder finder)</span></span>&#123;</div><div class="line">        <span class="keyword">this</span>.finder = finder;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="setter方法注入"><a href="#setter方法注入" class="headerlink" title="setter方法注入"></a>setter方法注入</h2><p>增加一个setter方法来传入创建好的MovieFinder对象，同样可以避免在MovieFinder中hard init这个对象<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MovieLister</span></span>&#123;</div><div class="line">    ...</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setFinder</span><span class="params">(MovieFinder finder)</span></span>&#123;</div><div class="line">        <span class="keyword">this</span>.finder = finder;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="接口注入"><a href="#接口注入" class="headerlink" title="接口注入"></a>接口注入</h2><p>接口注入使用接口来提供setter方法，其实现方法如下<br>首先创建一个注入使用的接口<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">InjectFinder</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">injectFinder</span><span class="params">(MovieFinder finder)</span>；</span></div><div class="line"><span class="function">&#125;</span></div></pre></td></tr></table></figure></p>
+<p>之后我们让MovieLister实现这个接口<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MovieLister</span> <span class="keyword">implements</span> <span class="title">InjectFinder</span></span>&#123;</div><div class="line">    ...</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">injectFinder</span><span class="params">(MovieFinder finder)</span></span>&#123;</div><div class="line">        <span class="keyword">this</span>.finder = finder;</div><div class="line">    &#125;</div><div class="line">    ...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>最后我们需要根据不同的框架创建被依赖的MovieFinder的实现。</p>
+<h1 id="Java中的注解依赖注入"><a href="#Java中的注解依赖注入" class="headerlink" title="Java中的注解依赖注入"></a>Java中的注解依赖注入</h1><p>在java中，使用注解进行依赖注入是最常用的。通过在字段的声明前添加@Inject注解进行标记，来实现依赖对象的自动注入。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Human</span></span>&#123;</div><div class="line">    ...</div><div class="line">    <span class="meta">@Inject</span> Father father</div><div class="line">    ...</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Human</span><span class="params">()</span></span>&#123;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>神奇的@Inject注解，一个注解就自动注入了？ 实质上，我们还需要使用依赖注入框架，进行一些配置。比如Dagger。</p>
+<p>参考：</p>
+<ol>
+<li><a href="https://martinfowler.com/articles/injection.html" target="_blank" rel="external">Inversion of Control Containers and the Dependency Injection pattern</a></li>
+<li><a href="https://github.com/android-cn/blog/tree/master/java/dependency-injection" target="_blank" rel="external">依赖注入</a></li>
+</ol>
+<hr>
+<p>author: <a href="https://leopoldcrossing.github.io/" target="_blank" rel="external">@ygwang</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/依赖注入/" rel="tag"># 依赖注入</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/10/MVC,MVP,MVVM/" rel="next" title="MVC，MVP，MVVM 架构分析">
+                <i class="fa fa-chevron-left"></i> MVC，MVP，MVVM 架构分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/30/依赖注入框架 -- Dagger2 基础/" rel="prev" title="依赖注入框架 -- Dagger2 基础">
+                依赖注入框架 -- Dagger2 基础 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="jinhui-mobile">
+          <p class="site-author-name" itemprop="name">jinhui-mobile</p>
+           
+              <p class="site-description motion-element" itemprop="description">stay hungry stay foolish</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jhmobile/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#依赖注入的作用"><span class="nav-number">2.</span> <span class="nav-text">依赖注入的作用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#依赖注入的实现方式"><span class="nav-number">3.</span> <span class="nav-text">依赖注入的实现方式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#构造函数注入（Contructor-Injection）"><span class="nav-number">3.1.</span> <span class="nav-text">构造函数注入（Contructor Injection）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#setter方法注入"><span class="nav-number">3.2.</span> <span class="nav-text">setter方法注入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#接口注入"><span class="nav-number">3.3.</span> <span class="nav-text">接口注入</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Java中的注解依赖注入"><span class="nav-number">4.</span> <span class="nav-text">Java中的注解依赖注入</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jinhui-mobile</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,842 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="金汇移动开发团队" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="基础从webpack文件上来看，主要用到的有entry，output，resolve，module，plugins  entry入口用来写入口文件，SPA一般是一个入口。当然也有vendor写在这里。 output出口 主要为webpack经过你设计的规则构建后输出的文件，指定输出位置，文件名等配置。 resolve解析 定制你的解析规则，后面会说到。 module模块 主要是装载器loaders">
+<meta property="og:type" content="article">
+<meta property="og:title" content="webpack体积优化">
+<meta property="og:url" content="http://jhmobile.github.io/2017/10/11/webpack体积优化/index.html">
+<meta property="og:site_name" content="金汇移动开发团队">
+<meta property="og:description" content="基础从webpack文件上来看，主要用到的有entry，output，resolve，module，plugins  entry入口用来写入口文件，SPA一般是一个入口。当然也有vendor写在这里。 output出口 主要为webpack经过你设计的规则构建后输出的文件，指定输出位置，文件名等配置。 resolve解析 定制你的解析规则，后面会说到。 module模块 主要是装载器loaders">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-10-11T09:21:14.339Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="webpack体积优化">
+<meta name="twitter:description" content="基础从webpack文件上来看，主要用到的有entry，output，resolve，module，plugins  entry入口用来写入口文件，SPA一般是一个入口。当然也有vendor写在这里。 output出口 主要为webpack经过你设计的规则构建后输出的文件，指定输出位置，文件名等配置。 resolve解析 定制你的解析规则，后面会说到。 module模块 主要是装载器loaders">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jhmobile.github.io/2017/10/11/webpack体积优化/">
+
+
+
+
+
+  <title> webpack体积优化 | 金汇移动开发团队 </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">金汇移动开发团队</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">技术博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-admin">
+          <a href="/admin" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            管理
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://jhmobile.github.io/2017/10/11/webpack体积优化/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jinhui-mobile">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="金汇移动开发团队">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                webpack体积优化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-11T15:16:00+08:00">
+                2017-10-11
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><p>从webpack文件上来看，主要用到的有entry，output，resolve，module，plugins</p>
+<ul>
+<li>entry入口<br>用来写入口文件，SPA一般是一个入口。当然也有vendor写在这里。</li>
+<li>output出口<br> 主要为webpack经过你设计的规则构建后输出的文件，指定输出位置，文件名等配置。</li>
+<li>resolve解析<br> 定制你的解析规则，后面会说到。</li>
+<li>module模块<br> 主要是装载器loaders书写的地方，webpack2已经改为rules。</li>
+<li>plugins插件</li>
+</ul>
+<p>详细请看<strong><a href="https://doc.webpack-china.org/configuration" target="_blank" rel="external">配置</a></strong></p>
+<h3 id="output"><a href="#output" class="headerlink" title="output"></a>output</h3><p>output除了用来指定输出位置外，还有一些hash和chunk的配置。hash是随机生成的，每一次都会改变。chunk这里指的是webpack分割的代码块，webpack在编译过程中会解析内容，通过内容生成chunkhash，chunkhash相对hash来说是相对不变的，我们也是利用这一点来做浏览器缓存。这里webpack提供了hash生成的算法，chunkhash失效时间等配置，一般来说我们不会用到。</p>
+<p>主要用到的东西就是path，publicpath，filename，chunkFilename<br>path指的是webpack构建完成后的输出地址<br>publicpath指的是资源的访问地址<br>filename是生成文件的名字<br>chunkFilename非入口的文件名</p>
+<h3 id="resolve"><a href="#resolve" class="headerlink" title="resolve"></a>resolve</h3><p>resolve是webpack可定制的解析，他的配置决定了你在require或者import一个包的时候，webpack去哪里找这个文件。<br>resolve.modules指定查找包的文件夹，可用绝对路径和文件名。文件名的查找规则和node_modules查找规则一致。<br>resolve.descriptionFiles指定查找包的描述文件，一般为package.json<br>resolve.mainFields指定描述文件中的入口字段，一般为main</p>
+<p>一般的解析就是通过modules查找到包，然后找包内的描述文件package.json,然后根据包内的描述文件入口字段mainFields来引入js文件<br>似乎mainFields指定的字段不支持Array类型，也就是说package.json中的main字段得是个String，这样你需要引入多个文件的时候就需要做个入口文件了。</p>
+<h3 id="loader和plugins的区别"><a href="#loader和plugins的区别" class="headerlink" title="loader和plugins的区别"></a>loader和plugins的区别</h3><p>其实他们两没有什么可比性，放在这里只是想说明一下他们在webpack中扮演的角色。<br>webpack是一个插件式的架构，采用Tapable事件流。<br>loader其实只是在webpack编译过程中的某一个时期执行，他的作用就是对符合规则的文件进行转换，比如常用的less-loader、css-loader、style-loader，less-loader先将less语法转为css，css-loader支持我们require引用css和处理css内部的import和url，style-loader则是将css文件转为style注入到页面中。loader支持链式调用，前面提到的例子就是将less转为style的一个链式调用。除此之外，各个loader之间是互不影响。<br>loader的调用方式分为三种，分别是命令行调用，内联调用和在配置文件webpack.config.js中配置。个人比较推荐第三种，这样对源码的影响将会是最小的。<br>plugins不同于loader，他贯穿整个webpack编译。利用webpack提供的很多hook，在不同的时期触发相应的操作，功能也多种多样。<br>感兴趣的可以了解一下<a href="http://www.tuicool.com/articles/2Inmeyn" target="_blank" rel="external">webpack之loader和plugin简介</a>和<a href="https://lihuanghe.github.io/2016/05/30/webpack-source-analyse.html" target="_blank" rel="external">webpack 源码解析</a>。</p>
+<h4 id="常用的loader"><a href="#常用的loader" class="headerlink" title="常用的loader"></a>常用的loader</h4><ul>
+<li>样式：style-loader、css-loader、less-loader、sass-loader等</li>
+<li>文件：raw-loader、file-loader 、url-loader、json-loader等</li>
+<li>编译：babel-loader、coffee-loader 、ts-loader等</li>
+<li>校验测试：mocha-loader、jshint-loader 、eslint-loader等</li>
+</ul>
+<h4 id="常用的plugin"><a href="#常用的plugin" class="headerlink" title="常用的plugin"></a>常用的plugin</h4><ul>
+<li>DefinePlugin<br>  全局常量定义</li>
+<li>UglifyJsPlugin<br>  代码丑化</li>
+<li>OccurenceOrderPlugin</li>
+<li>HtmlWebpackPlugin<br>  自动生成html5文件</li>
+<li>CommonsChunkPlugin<br>  公共代码整合</li>
+<li>CompressionWebpackPlugin<br>  gzip压缩</li>
+</ul>
+<p>详细请看<strong><a href="https://github.com/webpack-contrib/awesome-webpack" target="_blank" rel="external">awesome-webpack</a>、<a href="http://www.tuicool.com/articles/2Inmeyn" target="_blank" rel="external">webpack之loader和plugin简介</a>、<a href="http://www.css88.com/doc/webpack2/guides/development/" target="_blank" rel="external">webpack2.2中文文档</a></strong></p>
+<h3 id="webpack执行流程"><a href="#webpack执行流程" class="headerlink" title="webpack执行流程"></a>webpack执行流程</h3><ul>
+<li>entry-option<br>初始化option</li>
+<li>run<br>开始编译</li>
+<li>make<br>从entry开始递归的分析依赖，对每个依赖模块进行build</li>
+<li>before-resolve - after-resolve<br>对其中一个模块位置进行解析</li>
+<li>build-module<br>开始构建 (build) 这个module,这里将使用文件对应的loader加载</li>
+<li>normal-module-loader<br>对用loader加载完成的module(是一段js代码)进行编译,用 <a href="https://github.com/ternjs/acorn" target="_blank" rel="external">acorn</a> 编译,生成ast抽象语法树。</li>
+<li>program<br>开始对ast进行遍历，当遇到require等一些调用表达式时，触发call require<br>事件的handler执行，收集依赖，并。如：AMDRequireDependenciesBlockParserPlugin等</li>
+<li>seal<br>所有依赖build完成，下面将开始对chunk进行优化，比如合并,抽取公共模块,加hash</li>
+<li>bootstrap<br>生成启动代码<br>emit<br>把各个chunk输出到结果文件</li>
+</ul>
+<h2 id="包体积优化"><a href="#包体积优化" class="headerlink" title="包体积优化"></a>包体积优化</h2><h3 id="包分析"><a href="#包分析" class="headerlink" title="包分析"></a>包分析</h3><p>通过插件<a href="https://www.npmjs.com/package/webpack-bundle-analyzer" target="_blank" rel="external">webpack-bundle-analyzer</a>进行分析。</p>
+<p><code>npm i webpack-bundle-analyzer --save</code></p>
+<p>这个插件在使用后会开启一个网页，一般为localhost:8888，当然这个可以配置。通过图像展示我们打包的每个文件组成，各个部分体积，总体积等一些信息。</p>
+<p>详细的配置可以查看npm上面的文档，这里我也是用了npm的案例配置。</p>
+<p><strong>PS：</strong>个人认为优化还是要基于对项目的熟悉上，否则可能会无从下手。</p>
+<h3 id="lodash-优化"><a href="#lodash-优化" class="headerlink" title="lodash 优化"></a>lodash 优化</h3><p><code>npm install babel-plugin-lodash lodash-webpack-plugin --save</code></p>
+<pre><code>const LodashModuleReplacementPlugin = require(&apos;lodash-webpack-plugin&apos;);
+
+const config = {
+  plugins: [
+    new LodashModuleReplacementPlugin({
+      path: true,
+      flattening: true
+    })
+  ]
+};
+
+.babelrc
+plugins: [&apos;transform-runtime&apos;, &apos;lodash&apos;],
+</code></pre><h3 id="懒加载"><a href="#懒加载" class="headerlink" title="懒加载"></a>懒加载</h3><p><code>npm i bundle-loader --save</code></p>
+<pre><code>require(&quot;bundle-loader?lazy&amp;name=my-chunk!./file.js&quot;);
+OR
+import XXX from &quot;bundle-loader?lazy&amp;[name=[name]]!./file.js&quot;
+</code></pre><h3 id="CDN优化"><a href="#CDN优化" class="headerlink" title="CDN优化"></a>CDN优化</h3><p>CDN优化依赖一个包管理器Bower</p>
+<p>Bower算是一个很老的前端包管理器，虽说它叫包管理器，其实他只是提供了扁平化的下载和记录功能。</p>
+<p>目前Bower已宣告终止开发，前端模块管理全面移向npm。</p>
+<p>这里npm3已经号称是JavaScript的包管理器，而不仅仅是node的包管理器了。：）</p>
+<p>####　安装Bower</p>
+<p><code>npm i -g bower</code></p>
+<h4 id="Bower部分命令"><a href="#Bower部分命令" class="headerlink" title="Bower部分命令"></a>Bower部分命令</h4><p>bower的命令和npm大同小异，以下是几个常用的命令：</p>
+<ul>
+<li>初始化，生成bower.json文件，功效和package.json差不多<br><code>bower init</code></li>
+<li>查找包，当然也可以通过官网查找<br><code>bower search XXX</code></li>
+<li>安装包，规则和npm一致，可以下载对应版本的包<br><code>bower install XXX@XX --save</code></li>
+</ul>
+<h4 id="webpack和bower的连接"><a href="#webpack和bower的连接" class="headerlink" title="webpack和bower的连接"></a>webpack和bower的连接</h4><p>通过插件<a href="https://www.npmjs.com/package/bower-webpack-plugin" target="_blank" rel="external">bower-webpack-plugin</a>进行webpack和bower的连接。</p>
+<p><code>npm i bower-webpack-plugin --save</code></p>
+<p>这里其实他做的很类似resolve的alise，就是通过插件指定了require/import一个bower包的时候的地址和文件。</p>
+<p>以下是它的配置：</p>
+<pre><code>var BowerWebpackPlugin = require(&quot;bower-webpack-plugin&quot;);
+new BowerWebpackPlugin({
+  modulesDirectories: [&quot;bower_components&quot;],
+  manifestFiles:&quot;bower.json&quot;,
+  excludes: /.*\.less/
+}),
+</code></pre><p>通过modulesDirectories指向bower的依赖文件夹，manifestFiles指向入口文件。这里一般配置一般都是固定的，详细的配置可以查看NPM文档。<br>下面是bootstrap的bower.json文件，可以看出它是通过main字段来引入对应文件的。</p>
+<p>bower包的引入和正常的npm包一样引入，通过import或者require，测试发现还是require效果好一点，少一点坑。</p>
+<p>在升级到webpack2之后，发现这个插件已经不支持了，转采用<a href="https://github.com/codewizz/bower-resolve-webpack-plugin" target="_blank" rel="external">bower-resolve-webpack-plugin</a><br>它的配置参考github文档，发现只能加载js文件，废弃！不过可以借鉴一下它写插件</p>
+<h3 id="bootstrap"><a href="#bootstrap" class="headerlink" title="bootstrap"></a>bootstrap</h3><p>bootstrap-loader用来解决bootstrap加载<br>查找网上webpack引入bootstrap一致推荐bootstrap-loader，测试后发现引入这个东西bootstrap会占用将近150kb的空间，记录一下<br>vendor占用544kb<br>app占用158kb</p>
+<p>安装<br><code>npm install bootstrap-loader --save</code><br><code>npm install bootstrap-sass --save</code><br><code>npm install css-loader node-sass resolve-url-loader sass-loader style-loader url-loader --save</code></p>
+<p>加载<br> <code>require(&#39;bootstrap-loader&#39;)</code></p>
+<p>详细请看<a href="http://www.cnblogs.com/liuyt/p/5708508.html" target="_blank" rel="external">如何把bootstrap用webpack打包</a></p>
+<p>另一种办法是通过bower引入，但是bower中bootstrap给的入口文件有一个less，无法解决，只能修改less为css。这样bootstrap占用会只有不到50kb<br>vendor占用390kb<br>app占用190kb</p>
+<hr>
+<h2 id="webpack2-tree-shaking"><a href="#webpack2-tree-shaking" class="headerlink" title="webpack2 tree-shaking"></a>webpack2 tree-shaking</h2><p>node的import语法允许我们只引入我们需要的方法，这对于js的内存占用是一种极大的提升。同时在webpack打包的时候也利用了这种特性，只打包我们引入的方法。但是这一点和babel的转码会有冲突，具体原因看这里如下：</p>
+<blockquote>
+<p>tree-shaking 是指借助es6 import export 语法静态性的特点来删掉export但是没有import过的东西，babel会在编译转化es6代码时把import export转换为cmd的module.export<br>原文请看<a href="http://www.2ality.com/2015/12/webpack-tree-shaking.html" target="_blank" rel="external">Tree-shaking with webpack 2 and Babel 6</a>。</p>
+</blockquote>
+<p>我们为了利用webpack2的这种特性，需要做一些配置，见原文。<br>经过测试，我发现这个特性能减少的包体积量几乎可以忽略不计。难怪会有此讨论-&gt;<a href="https://www.zhihu.com/question/41922432" target="_blank" rel="external">如何评价 Webpack 2 新引入的 Tree-shaking 代码优化技术？</a></p>
+<h2 id="打包速度优化"><a href="#打包速度优化" class="headerlink" title="打包速度优化"></a>打包速度优化</h2><p>flag</p>
+<h2 id="webpack2入坑"><a href="#webpack2入坑" class="headerlink" title="webpack2入坑"></a>webpack2入坑</h2><ol>
+<li>入口和出口其实改动不大</li>
+<li>resolve改动会大一点，不过因为我们不经常用，所以不用太关注，这里需要注意的就是以下几点：<ul>
+<li>resolve.extensions配置，数组不需要在第一位加空字符串了</li>
+<li>resolve.root, resolve.fallback, resolve.modulesDirectories合并为resolve.modules</li>
+</ul>
+</li>
+<li>module语法改动<ul>
+<li>module.loaders改为module.rules</li>
+<li>不再支持简写loader，也就是说css以后要写成css-loader</li>
+<li>链式调用style!css!less改为use[]</li>
+</ul>
+</li>
+<li>plugins改动<br> 这个就需要看各个插件的支持了，有部分插件是只支持1不支持2的，还有webpack内置插件的有部分语法改动，需要用的时候查看。改动最大的就是extract-text-webpack-plugin，不升级无法使用。</li>
+</ol>
+<p>webpack2主要的变更就是对ES6的支持更好了，当然我升级到2以后除了踩了很多语法坑和插件坑之外，并没有体验到所谓的性能提升，很尴尬。利用了tree shaking特性后包的体积也并没有减小多少。只能说webpack2比1更大的规范化，并且目前webpack已经升级到了3.5，语法已经稳定，市面上的各类资料和插件也都是webpack2更完善、支持更好。</p>
+<p><strong>传送门</strong></p>
+<p><a href="http://www.tuicool.com/articles/2Inmeyn" target="_blank" rel="external">webpack之loader和plugin简介</a></p>
+<p><a href="https://lihuanghe.github.io/2016/05/30/webpack-source-analyse.html" target="_blank" rel="external">webpack 源码解析</a></p>
+<p><a href="https://doc.webpack-china.org/" target="_blank" rel="external">webpack中文官网</a></p>
+<p><a href="http://blog.csdn.net/keliyxyz/article/details/51571386" target="_blank" rel="external">webpack入门（一）——webpack 介绍</a></p>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzIyMjE0ODQ0OQ==&amp;mid=402764877&amp;idx=1&amp;sn=aa40a80bb1920a80fc187e8df99c4824" target="_blank" rel="external">[译] Webpack 2 有哪些新东西</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/09/05/hello-world/" rel="next" title="快速开始">
+                <i class="fa fa-chevron-left"></i> 快速开始
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/10/11/ECMAScript-2015-语法分享/" rel="prev" title="ECMAScript 2015 语法分享">
+                ECMAScript 2015 语法分享 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="jinhui-mobile">
+          <p class="site-author-name" itemprop="name">jinhui-mobile</p>
+           
+              <p class="site-description motion-element" itemprop="description">stay hungry stay foolish</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jhmobile/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础"><span class="nav-number">1.</span> <span class="nav-text">基础</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#output"><span class="nav-number">1.1.</span> <span class="nav-text">output</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#resolve"><span class="nav-number">1.2.</span> <span class="nav-text">resolve</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#loader和plugins的区别"><span class="nav-number">1.3.</span> <span class="nav-text">loader和plugins的区别</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#常用的loader"><span class="nav-number">1.3.1.</span> <span class="nav-text">常用的loader</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常用的plugin"><span class="nav-number">1.3.2.</span> <span class="nav-text">常用的plugin</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#webpack执行流程"><span class="nav-number">1.4.</span> <span class="nav-text">webpack执行流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#包体积优化"><span class="nav-number">2.</span> <span class="nav-text">包体积优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#包分析"><span class="nav-number">2.1.</span> <span class="nav-text">包分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#lodash-优化"><span class="nav-number">2.2.</span> <span class="nav-text">lodash 优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#懒加载"><span class="nav-number">2.3.</span> <span class="nav-text">懒加载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CDN优化"><span class="nav-number">2.4.</span> <span class="nav-text">CDN优化</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Bower部分命令"><span class="nav-number">2.4.1.</span> <span class="nav-text">Bower部分命令</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#webpack和bower的连接"><span class="nav-number">2.4.2.</span> <span class="nav-text">webpack和bower的连接</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bootstrap"><span class="nav-number">2.5.</span> <span class="nav-text">bootstrap</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webpack2-tree-shaking"><span class="nav-number">3.</span> <span class="nav-text">webpack2 tree-shaking</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#打包速度优化"><span class="nav-number">4.</span> <span class="nav-text">打包速度优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#webpack2入坑"><span class="nav-number">5.</span> <span class="nav-text">webpack2入坑</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jinhui-mobile</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

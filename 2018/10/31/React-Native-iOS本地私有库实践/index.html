@@ -1,0 +1,772 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="react-native,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="金汇移动开发团队" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="起因Facebook官方对react-native（下面简称RN）在iOS端的集成方式为本地Pod库，这种方式有两个缺点：  项目更新RN依赖版本较为繁琐，需要对项目中的node_modules文件夹进行文件操作，这种方式不利于模块化和版本管理  对pod形式的库项目支持不友好，pod库的依赖只能支持name+version的形式，无法支持本地源码形式的依赖   综上，需要在公司私有Pod仓库中添">
+<meta name="keywords" content="react-native">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React Native iOS本地私有库实践">
+<meta property="og:url" content="http://jhmobile.github.io/2018/10/31/React-Native-iOS本地私有库实践/index.html">
+<meta property="og:site_name" content="金汇移动开发团队">
+<meta property="og:description" content="起因Facebook官方对react-native（下面简称RN）在iOS端的集成方式为本地Pod库，这种方式有两个缺点：  项目更新RN依赖版本较为繁琐，需要对项目中的node_modules文件夹进行文件操作，这种方式不利于模块化和版本管理  对pod形式的库项目支持不友好，pod库的依赖只能支持name+version的形式，无法支持本地源码形式的依赖   综上，需要在公司私有Pod仓库中添">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-10-31T09:14:47.707Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React Native iOS本地私有库实践">
+<meta name="twitter:description" content="起因Facebook官方对react-native（下面简称RN）在iOS端的集成方式为本地Pod库，这种方式有两个缺点：  项目更新RN依赖版本较为繁琐，需要对项目中的node_modules文件夹进行文件操作，这种方式不利于模块化和版本管理  对pod形式的库项目支持不友好，pod库的依赖只能支持name+version的形式，无法支持本地源码形式的依赖   综上，需要在公司私有Pod仓库中添">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jhmobile.github.io/2018/10/31/React-Native-iOS本地私有库实践/">
+
+
+
+
+
+  <title> React Native iOS本地私有库实践 | 金汇移动开发团队 </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">金汇移动开发团队</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">技术博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-admin">
+          <a href="/admin" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            管理
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://jhmobile.github.io/2018/10/31/React-Native-iOS本地私有库实践/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jinhui-mobile">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="金汇移动开发团队">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                React Native iOS本地私有库实践
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-10-31T09:56:00+08:00">
+                2018-10-31
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>Facebook官方对react-native（下面简称RN）在iOS端的集成方式为本地Pod库，这种方式有两个缺点：</p>
+<ol>
+<li><p>项目更新RN依赖版本较为繁琐，需要对项目中的node_modules文件夹进行文件操作，这种方式不利于模块化和版本管理</p>
+</li>
+<li><p>对pod形式的库项目支持不友好，pod库的依赖只能支持name+version的形式，无法支持本地源码形式的依赖</p>
+</li>
+</ol>
+<p>综上，需要在公司私有Pod仓库中添加对RN的支持。</p>
+<h2 id="一些尝试"><a href="#一些尝试" class="headerlink" title="一些尝试"></a>一些尝试</h2><h3 id="常规方式"><a href="#常规方式" class="headerlink" title="常规方式"></a>常规方式</h3><p>常规方式Pod库的常规操作方式为先lint再push，这种方式在RN上会遇到很多错误，解决了一批错误后最终停止在一个x86_64的错误上：<code>Undefined symbols for architecture x86_64</code>，这是一个比较常见的编译错误，但是尝试了很多方式后仍然无法解决。这里记录下关键问题，供后续参考：</p>
+<ul>
+<li>lint和push的时候需要增加几个关键选项：</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">--use-libraries		#不加会报一些c++库找不到的错误</span><br><span class="line">--allow-warnings	#不加只有warning也无法lint通过</span><br><span class="line">--verbose		#增加一些关键信息</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果对本地仓库有依赖，sources要指定本地私有仓库，不然默认是查找Cocoapods官方仓库</li>
+</ul>
+<h3 id="曲线方式"><a href="#曲线方式" class="headerlink" title="曲线方式"></a>曲线方式</h3><p>另外一个思路是考虑先把RN整体打成framework，再集成到Pod库中。这种方式最终停止在一个错误：<code>invalid bitcode signature</code>，跟上面的问题一样，没有搞定。</p>
+<h3 id="手动操作Spec仓库方式"><a href="#手动操作Spec仓库方式" class="headerlink" title="手动操作Spec仓库方式"></a>手动操作Spec仓库方式</h3><p>在没有思路的时候，在google尝试搜索关键词<code>react-native  podspec</code>，发现一篇文章：<a href="https://imfong.com/post/Private-Pods-Add-react-native，里面分享通过`pod" target="_blank" rel="noopener">https://imfong.com/post/Private-Pods-Add-react-native，里面分享通过`pod</a> ipc spec`命令将.podspec文件转成.podspec.json格式文件，然后将代码和.podspec.json分别提交到代码仓库和Pod仓库的方式，绕过lint和push的常规步骤。</p>
+<p>尝试了一下，虽然遇到一些编译错误，但不是整体编译不过，而是一些RN内部类找不到，说明至少RN放到Pod仓库了。沿着这个思路往下探索，最终解决。</p>
+<h2 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h2><ol>
+<li>去<code>https://github.com/facebook/react-native/tags</code>下载对应版本的RN源码包，解压缩后将源码提交到本地仓库<a href="mailto:`git@gitlab.jinhui365.cn" target="_blank" rel="noopener">`git@gitlab.jinhui365.cn</a>:mobile/react-native.git` master分支。这里需要注意的问题是要保证该版本所有文件都会提交，包括.开头的文和文件夹。</li>
+<li>在gitlab上为新版本打一个tag，tag名称约定为v{版本号}，例如版本号为0.57.4，则tag名称为v0.57.4。</li>
+<li>进入源码根目录，执行<code>pod ipc spec React.podspec &gt;&gt; React.podspec.json</code>。这里需要注意的是不要污染本地源码仓库，可以在另外一份源码拷贝上操作。</li>
+<li><p>打开React.podspec.json文件，将source字段修改为本地的RN源码仓库地址和对应地址</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;source&quot;: &#123;</span><br><span class="line">    &quot;git&quot;: &quot;git@gitlab.jinhui365.cn:mobile/react-native.git&quot;,</span><br><span class="line">    &quot;tag&quot;: &quot;v0.57.4&quot;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将修改后的React.podspec.json放到私有Pod仓库对应的目录下提交。例如<code>React/0.57.4/React.podspec.json</code></p>
+</li>
+<li>在源码根目录下，进入<code>ReactCommon/yoga</code>，执行<code>pod ipc spec yoga.podspec &gt;&gt; yoga.podspec.json</code></li>
+<li><p>打开yoga.podspec.json，将source字段修改为本地的RN源码仓库地址和对应地址，并将source_files字段修改为<code>&quot;ReactCommon/yoga/**/*.{cpp,h}&quot;</code>，public_header_files字段修改为：<code>&quot;ReactCommon/yoga/yoga/{Yoga,YGEnums,YGMacros}.h&quot;</code></p>
+</li>
+<li><p>将修改后的yoga.podspec.json放到私有Pod仓库对应的目录下提交。例如<code>yoga/0.57.4.React/yoga.podspec.json</code></p>
+</li>
+<li><p>本地址行<code>pod repo update {仓库名}</code></p>
+</li>
+<li><p>至此，可以在项目中通过name+version的形式引用RN的pod依赖。</p>
+</li>
+</ol>
+<h2 id="0-53-3的问题"><a href="#0-53-3的问题" class="headerlink" title="0.53.3的问题"></a>0.53.3的问题</h2><p>RN在0.53.3上有一些编译问题，李杨在<a href="https://jhmobile.github.io/2018/05/08/React-Native%E6%B7%B7%E7%BC%96%E5%AD%A6%E4%B9%A0/#iOS%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA">React-Native混编学习#iOS环境搭建</a>  提到过相关解决方案，已按照该方案经将源码修改后tag为0.53.4。可以通过引用0.53.4来规避这些问题。</p>
+<h2 id="私有库依赖私有库"><a href="#私有库依赖私有库" class="headerlink" title="私有库依赖私有库"></a>私有库依赖私有库</h2><p>金汇移动端目前负责的业务较多，不同的业务之间会复用工具库（如路由库、日志库等）。同一个业务功能，有可能需要在不同的App之间复用（如民工汇、支付SDK）。因此，依赖的路径为APP-&gt;业务库-&gt;非业务库。</p>
+<p>iOS的依赖管理与js和Android不同。js统一使用package.json管理依赖，Android统一使用gradle文件来管理依赖。而iOS主项目使用Podfile管理，库项目使用podspec管理，并且库项目无法依赖本地文件。</p>
+<p>因此新建了私有库<a href="http://gitlab.jinhui365.cn/iOS/PodLibTest来测试了下，编译通过。这里记录下常见命令：" target="_blank" rel="noopener">http://gitlab.jinhui365.cn/iOS/PodLibTest来测试了下，编译通过。这里记录下常见命令：</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pod lib create PodLibTest	#创建pod库项目</span><br><span class="line">pod update --no-repo-update	#更新当前pod项目依赖</span><br><span class="line">pod repo update &#123;pod仓库名称&#125;	#更新本地pod仓库</span><br><span class="line">pod lib lint --use-libraries --allow-warnings --verbose --sources=git@gitlab.jinhui365.cn:iOS/JHJRSpecs.git,https://github.com/CocoaPods/Specs.git	#这些参数上面提到过，比较关键</span><br><span class="line">pod repo push JHJR PodLibTest.podspec  --use-libraries --allow-warnings --verbose	#同样关注下参数</span><br></pre></td></tr></table></figure>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li><p>Cocoapods不够完善、Facebook官方只提供的本地集成方式这两个前提条件，提升了iOS工程化的难度等级。因此需要iOS工程师对相关领域知识研究地更深入，才能达到与Android同水平的工程化程度。</p>
+</li>
+<li><p>面对非常见疑难问题，通过简单的关键词搜索可能不太好找到解决方案。需要从两个方面着手，一方面多尝试关键词组合，找到和你遇到同样问题的人写的文章或帖子；一方面深入研究官方文档货项目源码，从原理层着手分析问题。</p>
+</li>
+</ol>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/react-native/" rel="tag"># react-native</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/08/React-Native混编学习/" rel="next" title="React-Native混编学习">
+                <i class="fa fa-chevron-left"></i> React-Native混编学习
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="jinhui-mobile">
+          <p class="site-author-name" itemprop="name">jinhui-mobile</p>
+           
+              <p class="site-description motion-element" itemprop="description">stay hungry stay foolish</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jhmobile/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#起因"><span class="nav-number">1.</span> <span class="nav-text">起因</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些尝试"><span class="nav-number">2.</span> <span class="nav-text">一些尝试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常规方式"><span class="nav-number">2.1.</span> <span class="nav-text">常规方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#曲线方式"><span class="nav-number">2.2.</span> <span class="nav-text">曲线方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#手动操作Spec仓库方式"><span class="nav-number">2.3.</span> <span class="nav-text">手动操作Spec仓库方式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#操作步骤"><span class="nav-number">3.</span> <span class="nav-text">操作步骤</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0-53-3的问题"><span class="nav-number">4.</span> <span class="nav-text">0.53.3的问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#私有库依赖私有库"><span class="nav-number">5.</span> <span class="nav-text">私有库依赖私有库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jinhui-mobile</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

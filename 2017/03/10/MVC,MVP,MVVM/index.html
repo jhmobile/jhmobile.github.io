@@ -1,0 +1,890 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="架构分析,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="金汇移动开发团队" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="MVC,MVP,MVVM 作为 Android 开发中耳熟能详的三个框架，一直处半懵逼的状态，最近分析了一些谷歌官方给出的samples代码，记录下自己的理解，轻喷~">
+<meta name="keywords" content="架构分析">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MVC，MVP，MVVM 架构分析">
+<meta property="og:url" content="http://jhmobile.github.io/2017/03/10/MVC,MVP,MVVM/index.html">
+<meta property="og:site_name" content="金汇移动开发团队">
+<meta property="og:description" content="MVC,MVP,MVVM 作为 Android 开发中耳熟能详的三个框架，一直处半懵逼的状态，最近分析了一些谷歌官方给出的samples代码，记录下自己的理解，轻喷~">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/oanqhsxxmpa79b49rjc8fqry/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-03-08%2014.15.04.png">
+<meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/wkn35fa4inl0j9j4gr9gkrgm/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-03-09%2009.28.48.png">
+<meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/032tt769o9u7x2kd45oijzrp/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-03-09%2018.03.19.png">
+<meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/k6uhs2m0fx4ocf9ks4qer2hn/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-03-10%2015.00.21.png">
+<meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/fe3cf56gby1dqt2ai4nr4g0b/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-03-10%2015.00.41.png">
+<meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/65hqqxllygeeef2okibi9mfc/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-03-10%2015.29.23.png">
+<meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/72rwqh88tal6nq3okqgx23uu/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-03-11%2013.14.33.png">
+<meta property="og:updated_time" content="2017-09-05T01:48:23.231Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MVC，MVP，MVVM 架构分析">
+<meta name="twitter:description" content="MVC,MVP,MVVM 作为 Android 开发中耳熟能详的三个框架，一直处半懵逼的状态，最近分析了一些谷歌官方给出的samples代码，记录下自己的理解，轻喷~">
+<meta name="twitter:image" content="http://static.zybuluo.com/LeoPoldCrossing/oanqhsxxmpa79b49rjc8fqry/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-03-08%2014.15.04.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jhmobile.github.io/2017/03/10/MVC,MVP,MVVM/">
+
+
+
+
+
+  <title> MVC，MVP，MVVM 架构分析 | 金汇移动开发团队 </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">金汇移动开发团队</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">技术博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-admin">
+          <a href="/admin" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            管理
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://jhmobile.github.io/2017/03/10/MVC,MVP,MVVM/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jinhui-mobile">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="金汇移动开发团队">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                MVC，MVP，MVVM 架构分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-03-10T09:55:48+08:00">
+                2017-03-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Android/" itemprop="url" rel="index">
+                    <span itemprop="name">Android</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p> MVC,MVP,MVVM 作为 Android 开发中耳熟能详的三个框架，一直处半懵逼的状态，最近分析了一些谷歌官方给出的samples代码，记录下自己的理解，轻喷~</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="MVC-MVP-MVVM"><a href="#MVC-MVP-MVVM" class="headerlink" title="MVC,MVP,MVVM"></a>MVC,MVP,MVVM</h1><h2 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h2><p>Model View Controller,软件中最常见的一种框架，Controller 层负责操作 Model 数据，并且返回给 View 层进行展示。</p>
+<p><img src="http://static.zybuluo.com/LeoPoldCrossing/oanqhsxxmpa79b49rjc8fqry/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-03-08%2014.15.04.png" alt="MVC 架构图"></p>
+<p>从上图看出，用户通过 view 层发出指令到 controller 层，controller 通知 model 层更新数据，model 完成后直接显示在 view 层上。</p>
+<p>既然是 Android 猿，那我们从分析下 MVC模型在 Android 中的提现：</p>
+<ul>
+<li>View : layout.xml </li>
+<li>Model: 各种 JavaBean</li>
+<li>Controller : Activity，Fragment 等等</li>
+</ul>
+<p>我们来分析一个场景：点击按钮下载文件<br>按钮是卸载xml里面的，属于view层的<br>网络请求，数据解析相关代码写在其他类里，比如 netHelper ，属于model层。<br>view 和 model 通过button.setOnClickListener()关联其来，其卸载activity中，对应于 controller 层。</p>
+<p>好像很清晰，看起来没毛病的样子~开始搞事情。。。<br>如果数据回来需要在view层进行展示，控制某些控件的隐藏/显示，xml文件就无能为力了，我们只能将代码写在 activity 中。activity 就开始找不到自己的归属了，我是谁？ view or controller？<br>如果一个逻辑复杂的页面，维护起来简直是噩梦。</p>
+<p>当然从上图也可以看到Model层和View层并没有隔离开，这是一个重要的缺陷。违背了程序的低耦合原则。</p>
+<h2 id="MVP"><a href="#MVP" class="headerlink" title="MVP"></a>MVP</h2><p>MVP 作为 MVC 的演化，解决了不少 MVC 的问题。对于 android 来说，MVP 的 model 和 MVC 是一样的，而 activity 和 fragment 不再是 controller 层，而是纯粹的 view 层，所有关于用户事件的转发全部交由 presenter 层处理。<br><img src="http://static.zybuluo.com/LeoPoldCrossing/wkn35fa4inl0j9j4gr9gkrgm/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-03-09%2009.28.48.png" alt="MVP 架构示例图"></p>
+<h3 id="优势"><a href="#优势" class="headerlink" title="优势"></a>优势</h3><p>看图说话~我们来分析一下，MVP架构是如何解决 MVC 面对的问题：</p>
+<ul>
+<li><p>view 层和 model 层完全解耦。<br>Presenter 充当桥梁，view 层发出的事件传递到 presenter 层，由P层操作model，获取数据后通知 view 层更新UI。</p>
+</li>
+<li><p>activity 和 fragment 臃肿的问题。<br>activity 和 fragment 属于 view 层，仅仅是数据回调后更新 UI。在activity中和fragment中没有任何与model相关的逻辑代码，而是将这部分代码放到presenter层中，通过接口的形式将 view 层需要的数据返回。</p>
+</li>
+<li><p>便于测试。<br>比如如果我们需要测试获取数据功能，只需要实现对应的接口，看presenter是否调用了相应的方法。也可以在presenter中制造假数据，分发给view ，用来测试布局是否正确。</p>
+</li>
+<li><p>逻辑清晰，耦合性低，可维护性提高</p>
+</li>
+</ul>
+<h3 id="缺陷"><a href="#缺陷" class="headerlink" title="缺陷"></a>缺陷</h3><ul>
+<li>接口过多，一定程度影响我们的编码效率和代码可读性</li>
+<li>逻辑比较复杂的页面，Activity 代码还是会比较多，当然要比MVC要好的多，而且逻辑清晰</li>
+<li>Presenter 层比较臃肿</li>
+</ul>
+<h3 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h3><ul>
+<li>使用 Fragment 作为 view 层，而 activity 则是一个用于创建 view(fragment)和 presenter 的控制器。</li>
+<li>根据业务需求抽取基类，定义接口，公共的逻辑尽量抽取，减少代码量。</li>
+</ul>
+<h2 id="MVVM"><a href="#MVVM" class="headerlink" title="MVVM"></a>MVVM</h2><p>MVVM 最早是由微软提出，先上图：<br><img src="http://static.zybuluo.com/LeoPoldCrossing/032tt769o9u7x2kd45oijzrp/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-03-09%2018.03.19.png" alt="MVVM 架构图"><br>从 MVVM 架构图分析，MVVM 和 MVP 的区别貌似不大，presenter 换成了 viewmodel层，还有一点就是 view 层和 viewModel 层是binding的关系。viewmodel层的数据发生变化时，view层会相应的更新UI。</p>
+<h3 id="DataBinding"><a href="#DataBinding" class="headerlink" title="DataBinding"></a>DataBinding</h3><p><a href="https://leopoldcrossing.github.io/2017/02/17/DataBinding%E4%BB%8B%E7%BB%8D/" target="_blank" rel="external">DataBinding框架</a><br>Android 平台 MVVM 的目前相当火爆，谷歌欧巴的DataBinding框架功不可没。它可以让我们轻松的实现MVVM。看了网上很多的文章，都说DataBinding就是ViewModel层，我有点不同的看法，在这里提出来，大家讨论一下。</p>
+<ul>
+<li><p>众多博文的观点： Android 中 MVVM 就是 Databinding 框架的运用。Android Data Binding中的 ViewModel是根据layout自动生成的Binding类，比如 activity_main.xml ,生成的Binding类就是ActivityMainBinding。</p>
+</li>
+<li><p>不同观点：ViewModel 是可以进行 binding 的数据模型，Binding 类是View 和 ViewModel 之间的桥梁。ViewModel层数据对象三种形式：</p>
+</li>
+</ul>
+<ol>
+<li>继承BaseObservable </li>
+<li>Observable Fields</li>
+<li>Observable Collections<br>这样定义的数据对象发生改变时，同步更新UI。<br>DataBinding 框架通过<code>setContentView(int  resourceId
+)</code> 和<code>setXXX()</code> 方法完成View和ViewModel的绑定。</li>
+</ol>
+<h2 id="小结：理论知识讲完了，我们总结一下"><a href="#小结：理论知识讲完了，我们总结一下" class="headerlink" title="小结：理论知识讲完了，我们总结一下"></a>小结：理论知识讲完了，我们总结一下</h2><ul>
+<li>了解区分 MVC，MVP，MVVM</li>
+<li>初步了解这三种模式在Android中的使用。</li>
+<li>DataBinding 在 MVVM 模式中的职责</li>
+</ul>
+<p>其实，真正的最佳实践都是人想出来的，我们并不一定要死磕一种模式。see一下谷歌大大实现的架构。</p>
+<h1 id="Android-官方架构分析"><a href="#Android-官方架构分析" class="headerlink" title="Android 官方架构分析"></a>Android 官方架构分析</h1><h2 id="Android-architecture介绍"><a href="#Android-architecture介绍" class="headerlink" title="Android - architecture介绍"></a>Android - architecture介绍</h2><p><a href="https://github.com/googlesamples/android-architecture" target="_blank" rel="external">项目地址:android-architecture</a><br>Android框架提供了很大的灵活性去创建一个APP。这种灵活性很有价值，但是也让app有很多类，不一致的命名和不规范的框架结构。导致测试，维护，扩展困难。<br>Android Architecture 演示了帮助解决或避免这些问题的常用方案，该项目用不同的架构实现了同一个APP。当然这些samples仅仅是作为参考，在我们创建自己的app时，还是根据需求选择最合适的。</p>
+<h3 id="稳定的samples"><a href="#稳定的samples" class="headerlink" title="稳定的samples"></a>稳定的samples</h3><p><img src="http://static.zybuluo.com/LeoPoldCrossing/k6uhs2m0fx4ocf9ks4qer2hn/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-03-10%2015.00.21.png" alt="屏幕快照 2017-03-10 15.00.21.png-98.7kB"></p>
+<h3 id="正在开发的samples"><a href="#正在开发的samples" class="headerlink" title="正在开发的samples"></a>正在开发的samples</h3><p><img src="http://static.zybuluo.com/LeoPoldCrossing/fe3cf56gby1dqt2ai4nr4g0b/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-03-10%2015.00.41.png" alt="屏幕快照 2017-03-10 15.00.41.png-47.6kB"></p>
+<p>废话不多说了，下面选择两个我想要在项目中使用的两个架构进行分析：<br><code>todo-mvp</code>和<code>todo-mvp-databinding</code></p>
+<h2 id="TODO-MVP架构分析"><a href="#TODO-MVP架构分析" class="headerlink" title="TODO-MVP架构分析"></a>TODO-MVP架构分析</h2><p>todo-mvp 是基础的MVP架构，没有使用其他的任何类库。</p>
+<h3 id="app设计"><a href="#app设计" class="headerlink" title="app设计"></a>app设计</h3><p>该示例项目的代码组织方式完全按照功能组织</p>
+<ul>
+<li>Tasks - 管理tasks列表</li>
+<li>TaskDetail - 查看task详情，并提供删除功能</li>
+<li>AddEditTask - 增加和编辑 tasks</li>
+<li>Statistics - 查看最近的日程 </li>
+</ul>
+<p>每一个功能内部分为xActivity,xContract,xFragment,xPresenter四个类文件。</p>
+<ul>
+<li>Activity 类，用于创建Fragment 和 Presenter</li>
+<li>Contract 类，这个与之前见到的mvp实现都不同，该类用于统一管理 view 和 presenter 的所有接口，使得 view 和 presenter 中的功能非常清晰。</li>
+<li>Fragment类，View 层 ，实现 view 接口</li>
+<li>Presenter类，Contract类中相应 Presenter 接口的实现类</li>
+</ul>
+<p>结构图如下：<br><img src="http://static.zybuluo.com/LeoPoldCrossing/65hqqxllygeeef2okibi9mfc/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-03-10%2015.29.23.png" alt="屏幕快照 2017-03-10 15.29.23.png-25.1kB"></p>
+<h3 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h3><h4 id="基类"><a href="#基类" class="headerlink" title="基类"></a>基类</h4><p>我们先来看两个Base接口类， BasePresenter 和 BaseView<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BasePresenter</span></span>&#123;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">start</span><span class="params">()</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>BasePresenter中含有方法start(),该方法的作用是presenter开始获取数据并调用 view 中的方法更新UI。其调用时机是在 Fragment 类的 onResume() 方法中。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">BaseView</span>&lt;<span class="title">T</span>&gt;</span>&#123;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setPresenter</span><span class="params">(T presenter)</span></span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>BaseView 中含有方法 setPresenter，该方法作用是将presenter示例传入 view 中，调用时机是 Presenter 实现类的构造函数中。</p>
+<h4 id="契约类"><a href="#契约类" class="headerlink" title="契约类"></a>契约类</h4><p>之前说过契约类，是与之前所见的MVP实现不同，也是我感觉很优雅的地方。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">view 和 presenter 的职责很明了，增删改都很方便</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">TaskDetailContract</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">interface</span> <span class="title">View</span> <span class="keyword">extends</span> <span class="title">BaseView</span>&lt;<span class="title">Presenter</span>&gt; </span>&#123;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">setLoadingIndicator</span><span class="params">(<span class="keyword">boolean</span> active)</span></span>;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">showMissingTask</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">        ...</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">interface</span> <span class="title">Presenter</span> <span class="keyword">extends</span> <span class="title">BasePresenter</span> </span>&#123;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">editTask</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">deleteTask</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">completeTask</span><span class="params">()</span></span>;</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">void</span> <span class="title">activateTask</span><span class="params">()</span></span>;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="Activity-的作用"><a href="#Activity-的作用" class="headerlink" title="Activity 的作用"></a>Activity 的作用</h3><p>Activity 在项目中是一个控制者，负责创建 view 及 presenter 实例，并将二者进行关联。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">TaskDetailFragment taskDetailFragment = (TaskDetailFragment) getSupportFragmentManager()</div><div class="line">                .findFragmentById(R.id.contentFrame);</div><div class="line"></div><div class="line">        if (taskDetailFragment == null) &#123;</div><div class="line">            taskDetailFragment = TaskDetailFragment.newInstance(taskId);</div><div class="line"></div><div class="line">            ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),</div><div class="line">                    taskDetailFragment, R.id.contentFrame);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        // Create the presenter</div><div class="line">        new TaskDetailPresenter(</div><div class="line">                taskId,</div><div class="line">                Injection.provideTasksRepository(getApplicationContext()),</div><div class="line">                taskDetailFragment);</div></pre></td></tr></table></figure></p>
+<h3 id="MVP-的实现与组织"><a href="#MVP-的实现与组织" class="headerlink" title="MVP 的实现与组织"></a>MVP 的实现与组织</h3><ul>
+<li><p>Presenter 创建时将 Fragment 作为参数传入构造方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">TasksPresenter</span><span class="params">(@NonNull TasksRepository tasksRepository, @NonNull TasksContract.View tasksView)</span> </span>&#123;</div><div class="line">        mTasksRepository = checkNotNull(tasksRepository, <span class="string">"tasksRepository cannot be null"</span>);</div><div class="line">        mTasksView = checkNotNull(tasksView, <span class="string">"tasksView cannot be null!"</span>);</div><div class="line">        <span class="comment">// view 调用setPresenter方法，注入 presenter 示例</span></div><div class="line">        mTasksView.setPresenter(<span class="keyword">this</span>);</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>Fragment onResume() 方法中调用 presenter.start()方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">public class TaskDetailFragment extends Fragment implements TaskDetailContract.View &#123;</div><div class="line">    ...</div><div class="line"></div><div class="line">    @Override</div><div class="line">    public void onResume() &#123;</div><div class="line">        super.onResume();</div><div class="line">        mPresenter.start();</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    @Override</div><div class="line">    public void setPresenter(@NonNull TaskDetailContract.Presenter presenter) &#123;</div><div class="line">        mPresenter = checkNotNull(presenter);</div><div class="line">    &#125;</div><div class="line">    ...</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>分析代码得出view 和 presenter 相互持有，并且通过构造函数或set方法进行依赖注入。view 处理用户与界面的交互，presenter与model层交互，处理数据回调的逻辑判断，如果需要更新UI，直接调用view的方法，实现了 view 和 presenter 的各司其职。</p>
+<h3 id="Model-层设计"><a href="#Model-层设计" class="headerlink" title="Model 层设计"></a>Model 层设计</h3><p>Model 最大的特点就是被赋予了获取数据的职责。与我们平常Model只定义Bean对象不同，todo-mvp中，数据的获取，存储，数据状态变化都是model层的任务。Presenter 只需要调用该层的方法并传入回调。</p>
+<p>总结：MVP遵循类单一职责的编程原则，但是代码量相对增加，而且view层的代码依然略显臃肿，xml文件作为View层的能力依然很弱，UI的更新依然需要咋Fragment中处理。</p>
+<h3 id="MVVM-与-MVP-相结合架构分析"><a href="#MVVM-与-MVP-相结合架构分析" class="headerlink" title="MVVM 与 MVP 相结合架构分析"></a>MVVM 与 MVP 相结合架构分析</h3><p>该架构基于 todo-mvp 示例并且使用了 DataBinding 库来展示数据和绑定事件。<br>它并不是严格的遵守 MVVM 模型 或者 MVP 模型，它同时使用了 ViewModel 和 Presenter 。</p>
+<h4 id="app-设计"><a href="#app-设计" class="headerlink" title="app 设计"></a>app 设计</h4><p>目录结构与todo-mvp一致。只是多了一个ViewModel。Statistics 和 tasks 模块实现ViewModel的方式并不一样，我们来逐个分析。</p>
+<p><img src="http://static.zybuluo.com/LeoPoldCrossing/72rwqh88tal6nq3okqgx23uu/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-03-11%2013.14.33.png" alt="屏幕快照 2017-03-11 13.14.33.png-31.5kB"></p>
+<h4 id="Statistics-模块"><a href="#Statistics-模块" class="headerlink" title="Statistics 模块"></a>Statistics 模块</h4><p>Statistics 模块<br>主要类：Activity ,Fragment ,ViewModel,Presenter</p>
+<ul>
+<li><p>StatisticsActivity ： 创建 Fragment，ViewModel ， Presenter对象，管理注入。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">StatisticsFragment statisticsFragment = (StatisticsFragment) getSupportFragmentManager()</div><div class="line">    .findFragmentById(R.id.contentFrame);</div><div class="line">    <span class="keyword">if</span> (statisticsFragment == <span class="keyword">null</span>) &#123;</div><div class="line">        statisticsFragment = StatisticsFragment.newInstance();</div><div class="line">    ActivityUtils.addFragmentToActivity(getSupportFragmentManager(),</div><div class="line">                    statisticsFragment, R.id.contentFrame);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">StatisticsViewModel statisticsViewModel = <span class="keyword">new</span> StatisticsViewModel(getApplicationContext());</div><div class="line"></div><div class="line"><span class="comment">// 注入viewModel，用于binding至xml文件</span></div><div class="line">statisticsFragment.setViewModel(statisticsViewModel);</div><div class="line"></div><div class="line"><span class="comment">// viewmodel 实现 view， 构造方法注入到presenter</span></div><div class="line">StatisticsPresenter statisticsPresenter = <span class="keyword">new</span> StatisticsPresenter(</div><div class="line">        Injection.provideTasksRepository(getApplicationContext()), statisticsViewModel);</div><div class="line"></div><div class="line"><span class="comment">// Fragment 注入 presenter。</span></div><div class="line">statisticsFragment.setPresenter(statisticsPresenter);</div></pre></td></tr></table></figure>
+</li>
+<li><p>StatisticsFragment ： 调用presenter的方法获取数据，绑定 viewmodel 至xml </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPresenter</span><span class="params">(@NonNull StatisticsPresenter presenter)</span></span>&#123;</div><div class="line">    mPresenter = checkNotNull(presenter)</div><div class="line">&#125;</div><div class="line"></div><div class="line">mViewDataBinding.setStats(mStatisticsViewModel)</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">layout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">data</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">import</span> <span class="attr">type</span>=<span class="string">"android.view.View"</span> /&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">variable</span></span></div><div class="line"><span class="tag">            <span class="attr">name</span>=<span class="string">"stats"</span></span></div><div class="line"><span class="tag">            <span class="attr">type</span>=<span class="string">"com.example.android.architecture.blueprints.todoapp.statistics.StatisticsViewModel"</span> /&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">data</span>&gt;</span></div><div class="line">    ...</div><div class="line"><span class="tag">&lt;/<span class="name">layout</span>&gt;</span></div></pre></td></tr></table></figure>
+<ul>
+<li><p>StatisticsViewModel ： 提供get set方法，binding 到 xml 文件，自动更新UI</p>
+</li>
+<li><p>StatisticsPresenter ： 与Model 层交互，获取数据后传递给viewmodel，更新UI</p>
+</li>
+</ul>
+<h4 id="Tasks模块"><a href="#Tasks模块" class="headerlink" title="Tasks模块"></a>Tasks模块</h4><p>Tasks 模块 MVP 结构的组织与实现与todo-mvp一致。<br>主要类： TasksActivity,TasksFragment,TasksPresenter,TasksItemActionHandler,TasksViewModel。</p>
+<ul>
+<li><p>TasksActivity ：管理，创建对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">TasksFragment tasksFragment =</div><div class="line">            (TasksFragment) getSupportFragmentManager().findFragmentById(R.id.contentFrame);</div><div class="line">    if (tasksFragment == null) &#123;</div><div class="line">        // Create the fragment</div><div class="line">        tasksFragment = TasksFragment.newInstance();</div><div class="line">        ActivityUtils.addFragmentToActivity(</div><div class="line">                getSupportFragmentManager(), tasksFragment, R.id.contentFrame);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    // Create the presenter</div><div class="line">    mTasksPresenter = new TasksPresenter(Injection.provideTasksRepository(</div><div class="line">            getApplicationContext()), tasksFragment);</div><div class="line">    </div><div class="line">    // 创建时注入Presenter，是为了方法的重用。</div><div class="line">    TasksViewModel tasksViewModel =</div><div class="line">            new TasksViewModel(getApplicationContext(), mTasksPresenter);</div><div class="line">    // 注入viewModel，通过Binding类与xml文件关联</div><div class="line">    tasksFragment.setViewModel(tasksViewModel);</div></pre></td></tr></table></figure>
+</li>
+<li><p>TasksFragment : View 层，持有ViewModel 和 Presenter。将ViewModel绑定至xml文件，根据数据自动更新UI，调用Presenter的方法获取或更新数据，处理用户和组件的交互。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">TasksFragBinding tasksFragBinding = TasksFragBinding.inflate(inflater, container, false);</div><div class="line">// 绑定viewmodel 和 xml文件，自动更新UI。</div><div class="line">tasksFragBinding.setTasks(mTasksViewModel);</div><div class="line">// 将presenter与xml绑定，作为事件处理类，重用方法</div><div class="line">tasksFragBinding.setActionHandler(mPresenter);</div></pre></td></tr></table></figure>
+</li>
+<li><p>TasksPresenter : 和 todo-mvp 的presenter 没什么区别，获取数据，然后调用view的方法，更新UI。</p>
+</li>
+<li><p>TasksViewModel : 继承BaseObservable，在与Xml文件绑定后，内容发生改变时刻自动更新UI。<br>注意 <code>@Bindable</code> 注解和 <code>notifyPropertyChanged()</code>的使用; </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div></pre></td><td class="code"><pre><div class="line">public class TasksViewModel extends BaseObservable &#123;</div><div class="line"></div><div class="line">    int mTaskListSize = 0;</div><div class="line"></div><div class="line">    private final TasksContract.Presenter mPresenter;</div><div class="line"></div><div class="line">    private Context mContext;</div><div class="line"></div><div class="line">    public TasksViewModel(Context context, TasksContract.Presenter presenter) &#123;</div><div class="line">        mContext = context;</div><div class="line">        mPresenter = presenter;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Bindable</div><div class="line">    public String getCurrentFilteringLabel() &#123;</div><div class="line">        switch (mPresenter.getFiltering()) &#123;</div><div class="line">            case ALL_TASKS:</div><div class="line">                return mContext.getResources().getString(R.string.label_all);</div><div class="line">            case ACTIVE_TASKS:</div><div class="line">                return mContext.getResources().getString(R.string.label_active);</div><div class="line">            case COMPLETED_TASKS:</div><div class="line">                return mContext.getResources().getString(R.string.label_completed);</div><div class="line">        &#125;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Bindable</div><div class="line">    public String getNoTasksLabel() &#123;</div><div class="line">        switch (mPresenter.getFiltering()) &#123;</div><div class="line">            case ALL_TASKS:</div><div class="line">                return mContext.getResources().getString(R.string.no_tasks_all);</div><div class="line">            case ACTIVE_TASKS:</div><div class="line">                return mContext.getResources().getString(R.string.no_tasks_active);</div><div class="line">            case COMPLETED_TASKS:</div><div class="line">                return mContext.getResources().getString(R.string.no_tasks_completed);</div><div class="line">        &#125;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Bindable</div><div class="line">    public Drawable getNoTaskIconRes() &#123;</div><div class="line">        switch (mPresenter.getFiltering()) &#123;</div><div class="line">            case ALL_TASKS:</div><div class="line">                return mContext.getResources().getDrawable(R.drawable.ic_assignment_turned_in_24dp);</div><div class="line">            case ACTIVE_TASKS:</div><div class="line">                return mContext.getResources().getDrawable(R.drawable.ic_check_circle_24dp);</div><div class="line">            case COMPLETED_TASKS:</div><div class="line">                return mContext.getResources().getDrawable(R.drawable.ic_verified_user_24dp);</div><div class="line">        &#125;</div><div class="line">        return null;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Bindable</div><div class="line">    public boolean getTasksAddViewVisible() &#123;</div><div class="line">        return mPresenter.getFiltering() == ALL_TASKS;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    @Bindable</div><div class="line">    public boolean isNotEmpty() &#123;</div><div class="line">        return mTaskListSize &gt; 0;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    public void setTaskListSize(int taskListSize) &#123;</div><div class="line">        mTaskListSize = taskListSize;</div><div class="line">        notifyPropertyChanged(BR.noTaskIconRes);</div><div class="line">        notifyPropertyChanged(BR.noTasksLabel);</div><div class="line">        notifyPropertyChanged(BR.currentFilteringLabel);</div><div class="line">        notifyPropertyChanged(BR.notEmpty);</div><div class="line">        notifyPropertyChanged(BR.tasksAddViewVisible);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>TasksItemActionHandler : 绑定至xml文件，通过set方法注入，传入Presenter，可以重用方法。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">public class TasksItemActionHandler &#123;</div><div class="line"></div><div class="line">    private TasksContract.Presenter mListener;</div><div class="line"></div><div class="line">    public TasksItemActionHandler(TasksContract.Presenter listener) &#123;</div><div class="line">        mListener = listener;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * Called by the Data Binding library when the checkbox is toggled.</div><div class="line">     */</div><div class="line">    public void completeChanged(Task task, boolean isChecked) &#123;</div><div class="line">        if (isChecked) &#123;</div><div class="line">            mListener.completeTask(task);</div><div class="line">        &#125; else &#123;</div><div class="line">            mListener.activateTask(task);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    /**</div><div class="line">     * Called by the Data Binding library when the row is clicked.</div><div class="line">     */</div><div class="line">    public void taskClicked(Task task) &#123;</div><div class="line">        mListener.openTaskDetails(task);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>总结：该架构节省去了findViewById的苦力活，通过Binding库和ViewModel层增强了XMl的功能。<br>相比MVP，view层中的代码减少，UI展式改变只需改变ViewModel层。<br>项目MVVM，业务逻辑代码放在了Presenter中，明确了各层的职责。<br>这也是我比较倾向在项目中使用的架构。</p>
+<h1 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h1><p>作为程序猿，纸上来的终觉浅，既然觉得浅了，咱们就去玩一些深的，自己去实现以下MVC，MVP，MVVM。实践出真知，真正的理解这三种架构。敬请期待~</p>
+<hr>
+<p>author:<a href="https://leopoldcrossing.github.io/" target="_blank" rel="external">@ygwang</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/架构分析/" rel="tag"># 架构分析</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/17/DataBinding介绍/" rel="next" title="DataBinding- Say Goodye to FindViewById">
+                <i class="fa fa-chevron-left"></i> DataBinding- Say Goodye to FindViewById
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/28/依赖注入/" rel="prev" title="依赖注入">
+                依赖注入 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="jinhui-mobile">
+          <p class="site-author-name" itemprop="name">jinhui-mobile</p>
+           
+              <p class="site-description motion-element" itemprop="description">stay hungry stay foolish</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jhmobile/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#MVC-MVP-MVVM"><span class="nav-number">1.</span> <span class="nav-text">MVC,MVP,MVVM</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MVC"><span class="nav-number">1.1.</span> <span class="nav-text">MVC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVP"><span class="nav-number">1.2.</span> <span class="nav-text">MVP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#优势"><span class="nav-number">1.2.1.</span> <span class="nav-text">优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#缺陷"><span class="nav-number">1.2.2.</span> <span class="nav-text">缺陷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#最佳实践"><span class="nav-number">1.2.3.</span> <span class="nav-text">最佳实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MVVM"><span class="nav-number">1.3.</span> <span class="nav-text">MVVM</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DataBinding"><span class="nav-number">1.3.1.</span> <span class="nav-text">DataBinding</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#小结：理论知识讲完了，我们总结一下"><span class="nav-number">1.4.</span> <span class="nav-text">小结：理论知识讲完了，我们总结一下</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Android-官方架构分析"><span class="nav-number">2.</span> <span class="nav-text">Android 官方架构分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Android-architecture介绍"><span class="nav-number">2.1.</span> <span class="nav-text">Android - architecture介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#稳定的samples"><span class="nav-number">2.1.1.</span> <span class="nav-text">稳定的samples</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#正在开发的samples"><span class="nav-number">2.1.2.</span> <span class="nav-text">正在开发的samples</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TODO-MVP架构分析"><span class="nav-number">2.2.</span> <span class="nav-text">TODO-MVP架构分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#app设计"><span class="nav-number">2.2.1.</span> <span class="nav-text">app设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#代码分析"><span class="nav-number">2.2.2.</span> <span class="nav-text">代码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#基类"><span class="nav-number">2.2.2.1.</span> <span class="nav-text">基类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#契约类"><span class="nav-number">2.2.2.2.</span> <span class="nav-text">契约类</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Activity-的作用"><span class="nav-number">2.2.3.</span> <span class="nav-text">Activity 的作用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVP-的实现与组织"><span class="nav-number">2.2.4.</span> <span class="nav-text">MVP 的实现与组织</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Model-层设计"><span class="nav-number">2.2.5.</span> <span class="nav-text">Model 层设计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#MVVM-与-MVP-相结合架构分析"><span class="nav-number">2.2.6.</span> <span class="nav-text">MVVM 与 MVP 相结合架构分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#app-设计"><span class="nav-number">2.2.6.1.</span> <span class="nav-text">app 设计</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Statistics-模块"><span class="nav-number">2.2.6.2.</span> <span class="nav-text">Statistics 模块</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Tasks模块"><span class="nav-number">2.2.6.3.</span> <span class="nav-text">Tasks模块</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#写在最后"><span class="nav-number">3.</span> <span class="nav-text">写在最后</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jinhui-mobile</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

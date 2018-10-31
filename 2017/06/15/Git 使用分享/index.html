@@ -1,0 +1,862 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="Git,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="金汇移动开发团队" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0">
+
+
+
+
+
+
+<meta name="description" content="Git 几个重要的概念 本地仓库Git 中大部分都是针对本地仓库的操作，完全不用担心污染远程仓库，比如 git add ，git commit ，git reset，checkout 等等。 远程仓库服务端的代码仓库，用于多人协作开发。。。每个开发人员的本地仓库都是一份完整的远程仓库备份。">
+<meta name="keywords" content="Git">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git 使用分享">
+<meta property="og:url" content="http://jhmobile.github.io/2017/06/15/Git 使用分享/index.html">
+<meta property="og:site_name" content="金汇移动开发团队">
+<meta property="og:description" content="Git 几个重要的概念 本地仓库Git 中大部分都是针对本地仓库的操作，完全不用担心污染远程仓库，比如 git add ，git commit ，git reset，checkout 等等。 远程仓库服务端的代码仓库，用于多人协作开发。。。每个开发人员的本地仓库都是一份完整的远程仓库备份。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/ir365lewu7qq77m6wbvohe60/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-06-14%2017.21.06.png">
+<meta property="og:updated_time" content="2017-09-05T01:48:23.231Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git 使用分享">
+<meta name="twitter:description" content="Git 几个重要的概念 本地仓库Git 中大部分都是针对本地仓库的操作，完全不用担心污染远程仓库，比如 git add ，git commit ，git reset，checkout 等等。 远程仓库服务端的代码仓库，用于多人协作开发。。。每个开发人员的本地仓库都是一份完整的远程仓库备份。">
+<meta name="twitter:image" content="http://static.zybuluo.com/LeoPoldCrossing/ir365lewu7qq77m6wbvohe60/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-06-14%2017.21.06.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://jhmobile.github.io/2017/06/15/Git 使用分享/">
+
+
+
+
+
+  <title> Git 使用分享 | 金汇移动开发团队 </title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">金汇移动开发团队</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">技术博客</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-admin">
+          <a href="/admin" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-sitemap"></i> <br>
+            
+            管理
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://jhmobile.github.io/2017/06/15/Git 使用分享/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="jinhui-mobile">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="金汇移动开发团队">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Git 使用分享
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-15T15:03:48+08:00">
+                2017-06-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Git/" itemprop="url" rel="index">
+                    <span itemprop="name">Git</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="Git-几个重要的概念"><a href="#Git-几个重要的概念" class="headerlink" title="Git 几个重要的概念"></a>Git 几个重要的概念</h2><ul>
+<li>本地仓库<br>Git 中大部分都是针对本地仓库的操作，完全不用担心污染远程仓库，比如 git add ，git commit ，git reset，checkout 等等。</li>
+<li>远程仓库<br>服务端的代码仓库，用于多人协作开发。。。每个开发人员的本地仓库都是一份完整的远程仓库备份。</li>
+</ul>
+<a id="more"></a>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ git push  // 推送至远程</div><div class="line">$ git pull  // 从远程拉取</div></pre></td></tr></table></figure>
+<ul>
+<li><p>工作区<br>个人电脑中代码所在目录（除版本库之外的内容），比如我们android的项目在我电脑里的工作区就是 android-pay项目。</p>
+</li>
+<li><p>暂存区<br>stage 或者 index，在 .git 目录下，有一个 index 文件，它是一个包含文件索引的目录树，记录了文件名，文件的状态信息（时间戳，文件长度等）。文件的内容并不存储其中，而是保存在Git对象库（.git/objects）中，文件索引建立了文件和对象库中对象实体之间的对应。<br>如果当前仓库，有文件更新，并且使用git add命令，那么这些更新就会出现在暂存区中。</p>
+</li>
+<li><p>版本库<br>执行 git init 命令后，生成的.git 目录。</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">工作原理示意图</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"></td>
+</tr>
+</tbody>
+</table>
+<p><img src="http://static.zybuluo.com/LeoPoldCrossing/ir365lewu7qq77m6wbvohe60/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-06-14%2017.21.06.png" alt="屏幕快照 2017-06-14 17.21.06.png-159.7kB"></p>
+<hr>
+<h2 id="为什么使用Git？"><a href="#为什么使用Git？" class="headerlink" title="为什么使用Git？"></a>为什么使用Git？</h2><ul>
+<li><p>Git为分布式，SVN为集中式<br>最核心的区别，Git几乎所有操作都可以脱离网络，SVN对网络依赖性比较强。</p>
+</li>
+<li><p>commit 更有意义<br>随时随地，commit。。。区分功能的提交，保护临时开发成果，还不用担心影响到别人</p>
+</li>
+<li><p>恢复版本<br>Git版本库，记录了所有的提交历史，找到commit id就 可以一些文件恢复到上次改动之前的版本（甚至整个项目恢复到之前的版本）。</p>
+</li>
+<li><p>查看历史<br>本地即可查看历史提交，历史版本等Log。</p>
+</li>
+<li><p>备份<br>当然出现问题的概率很小，至少 Git 在每个开发人员电脑都做了一份备份。</p>
+</li>
+<li><p>分支管理<br>git clone 命令是 clone 整个完整的代码录，<code>git branch -r</code> 命令可以查看到项目所有的分支，checkout 移动指针切换分支。<br>SVN 的 checkout 分支会在你的本地建立一个新目录。</p>
+</li>
+<li><p>Code Review<br>代码合并前申请merge request，code review 更直观。<br>Git 鼓励小功能也分支，简单快速么，合并分支需要 code review ，更利于我们代码质量的提高。</p>
+</li>
+<li><p>开发中断，应对方便<br>开发过程中必须切换分支，当前工作区修改处理方便。</p>
+</li>
+<li><p>顺应潮流，拥抱变化</p>
+</li>
+</ul>
+<p>个人最大的感触是 SVN 慢，Git 快。Git对于临时开发成果的保护更好，更方便。<br>但是 Git 操作更繁琐一些，需要一定的学习成本。我们当初选择Git最大的原因是 Code Review。</p>
+<hr>
+<h2 id="SVN-迁移-Git-流程"><a href="#SVN-迁移-Git-流程" class="headerlink" title="SVN 迁移 Git 流程"></a>SVN 迁移 Git 流程</h2><ol>
+<li>项目管理员初始化版本库<br> <code>$ git init</code> </li>
+<li>创建远程仓库，本地生成 SSH key ，设置 SSK key。<br> <code>$ ssh-keygen -t rsa -C &quot;youremail@example.com&quot;</code></li>
+<li>关联本地仓库和远程仓库。<br> <code>$ git remote add origin &lt;仓库地址&gt;</code></li>
+<li>提交代码，推送至远程仓库<br> <code>$ git add &lt;file&gt; or git add .</code><br> <code>$ git commit -m &lt;description&gt;</code><br> <code>$ git push -u origin &lt;branch name&gt;</code></li>
+<li>其余小伙伴 clone 仓库，创建关联分支，一起愉快的开发。<br> <code>$ git checkout -b &lt;branch name&gt;</code><br> <code>$ git branch –set-upstream-to=&lt;repository&gt;/&lt;branch name&gt;</code><br>or<br> <code>$ git checkout -b &lt;branch name&gt; origin/&lt;remote branch name&gt;</code></li>
+</ol>
+<hr>
+<h2 id="代码管理策略"><a href="#代码管理策略" class="headerlink" title="代码管理策略"></a>代码管理策略</h2><h3 id="git-flow推荐工作流"><a href="#git-flow推荐工作流" class="headerlink" title="git flow推荐工作流"></a>git flow推荐工作流</h3><ul>
+<li><p>主要分支<br>master: 永远处在即将发布(production-ready)状态<br>develop: 最新的开发状态</p>
+</li>
+<li><p>辅助分支<br>feature: 开发新功能的分支, 基于 develop, 完成后 merge 回 develop<br>release: 准备要发布版本的分支, 用来修复 bug. 基于 develop, 完成后 merge 回 develop 和 master<br>hotfix: 修复 master 上的问题, 等不及 release 版本就必须马上上线. 基于 master, 完成后 merge 回 master 和 develop</p>
+</li>
+</ul>
+<h3 id="Android-团队"><a href="#Android-团队" class="headerlink" title="Android 团队"></a>Android 团队</h3><ul>
+<li><p>常设分支<br>master：即将发布出去的版本，可以理解为测试所用版本，QA测试Bug在该分支修改。发布新版本时在该分支打tag发布。<br>dev：开发分支，小伙伴的feature分支都从该分支 chekcout ，feature分支 Demo 前合并到该分支（1.code review  2.检测CI是否正常），Demo通过后合并至master（Demo问题在dev修改，修改后code review通过合并），TAG标记。</p>
+</li>
+<li><p>临时分支<br>feature： 从 dev checkout，开发完成后，code view 合并至dev，进行Demo。<br>Bug分支： 1. QA 提测 bug ， master checkout，修复后合并至master及dev 2. 线上热修复 TAG checkout，修复后合并至master 及 dev ，打TAG。</p>
+</li>
+<li><p>TAG： 发布版本，提测，热修复操作时打TAG进行标记。</p>
+</li>
+</ul>
+<h4 id="移动团队另一种工作流"><a href="#移动团队另一种工作流" class="headerlink" title="移动团队另一种工作流"></a>移动团队另一种工作流</h4><ul>
+<li><p>常设分支<br>master：开发及测试共用，发布在该分支打标签。</p>
+</li>
+<li><p>临时分支<br>feature： 从 master checkout，开发完成后Demo，Demo 通过后 code review 合并至 master。<br>bug分支（热修复）： 从 tag checkout分支，修复以后合并至 master 及当前临时feature分支。打 tag 进行标记。</p>
+</li>
+</ul>
+<p>移动团队<br>Tips： 移动团队问题： dev 常设的必要性？</p>
+<hr>
+<h2 id="一些小Tip"><a href="#一些小Tip" class="headerlink" title="一些小Tip"></a>一些小Tip</h2><h3 id="常用-status-命令"><a href="#常用-status-命令" class="headerlink" title="常用 status 命令"></a>常用 status 命令</h3><p>多使用 git status 查看当前状态。</p>
+<h3 id="高质量的提交"><a href="#高质量的提交" class="headerlink" title="高质量的提交"></a>高质量的提交</h3><ul>
+<li>提交仅对应一个相关的改动</li>
+<li>完整的提交，不完整的请使用”Stash”</li>
+<li>提交前测试</li>
+<li>高质量的注释</li>
+</ul>
+<p>养成一个频繁地进行提交的习惯。这样做将自然而然的让你避免一个很庞大的提交，并且使这些提交可以更好只对映一个相关的改动。</p>
+<h3 id="多使用分支"><a href="#多使用分支" class="headerlink" title="多使用分支"></a>多使用分支</h3><p>分支功能应该广泛地被运用在不同的开发主题中。比如添加新功能，修复错误，尝试新的想法等等。</p>
+<h3 id="遵循一个工作流程"><a href="#遵循一个工作流程" class="headerlink" title="遵循一个工作流程"></a>遵循一个工作流程</h3><p>选择什么样的开发流程要取决如下一些因素：项目开发的类型，部署模式和开发团队成员的个人习惯（可能是最重要的）。不管怎样，选择什么样的流程都需要得到所有开发成员的一致认可，并且一直遵循它。</p>
+<h3 id="合并主分支代码到feature分支"><a href="#合并主分支代码到feature分支" class="headerlink" title="合并主分支代码到feature分支"></a>合并主分支代码到feature分支</h3><p>如果功能开发周期比较长，建议定期合dev分支代码到feature，减少冲突。</p>
+<h3 id="关联本地分支和远程分支"><a href="#关联本地分支和远程分支" class="headerlink" title="关联本地分支和远程分支"></a>关联本地分支和远程分支</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 关联后pull 和 push 时可以偷个懒</div><div class="line">$ git branch –set-upstream-to=&lt;repository&gt;/&lt;branch name&gt;</div></pre></td></tr></table></figure>
+<h3 id="多SSH管理"><a href="#多SSH管理" class="headerlink" title="多SSH管理"></a>多SSH管理</h3><ul>
+<li><p>生成对应平台的 SSH key</p>
+</li>
+<li><p>添加ssh私钥</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ssh-add ~/.ssh/id_rsa_github</div><div class="line">$ ssh-add ~/.ssh/id_rsa_gitlab</div></pre></td></tr></table></figure>
+</li>
+<li><p>创建修改config文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"># gitlab</div><div class="line">    Host gitlab.jinhui365.cn</div><div class="line">    HostName gitlab.jinhui365.cn  </div><div class="line">    PreferredAuthentications publickey</div><div class="line">    IdentityFile ~/.ssh/id_rsa_gitlab</div><div class="line">    User gitlab username</div><div class="line"># github</div><div class="line">    Host github.com</div><div class="line">    HostName github.com</div><div class="line">    PreferredAuthentications publickey</div><div class="line">    IdentityFile ~/.ssh/id_rsa_github</div><div class="line">    User github username</div></pre></td></tr></table></figure>
+</li>
+<li><p>设置局部用户名和邮箱</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git config user.name &quot;yourname&quot;  </div><div class="line">git config user.email &quot;youremail&quot;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="临时存储更改"><a href="#临时存储更改" class="headerlink" title="临时存储更改"></a>临时存储更改</h3><p>开发过程中，由于某些原因需要切换分支，中断开发。。。需要把当前的工作区清理出来.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// 储存工作现场</div><div class="line">$ git stash     </div><div class="line">// 查看 stash 列表</div><div class="line">$ git stash list</div><div class="line">// 恢复工作现场 </div><div class="line">$ git stash apply</div><div class="line">$ git satsh apply stash@&#123;0&#125; </div><div class="line">// 删除工作现场</div><div class="line">$ git stash drop</div><div class="line">$ git satsh drop stash@&#123;0&#125;</div><div class="line">// 恢复，并删除 stash </div><div class="line">$ git stash pop </div><div class="line">$ git satsh pop stash@&#123;0&#125;</div></pre></td></tr></table></figure></p>
+<blockquote>
+<p>Tip：临时存储时机：1， 切换分支之前 2，pull 之前 3，合并分支之前</p>
+</blockquote>
+<hr>
+<p>author <a href="https://leopoldcrossing.github.io/" target="_blank" rel="external">@ygwang</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Git/" rel="tag"># Git</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/04/Android ButterKnife 框架使用详解/" rel="next" title="ButterKnife 框架使用详解">
+                <i class="fa fa-chevron-left"></i> ButterKnife 框架使用详解
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/15/Git 使用入门/" rel="prev" title="Git 使用入门">
+                Git 使用入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="jinhui-mobile">
+          <p class="site-author-name" itemprop="name">jinhui-mobile</p>
+           
+              <p class="site-description motion-element" itemprop="description">stay hungry stay foolish</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/jhmobile/" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Git-几个重要的概念"><span class="nav-number">1.</span> <span class="nav-text">Git 几个重要的概念</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么使用Git？"><span class="nav-number">2.</span> <span class="nav-text">为什么使用Git？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SVN-迁移-Git-流程"><span class="nav-number">3.</span> <span class="nav-text">SVN 迁移 Git 流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码管理策略"><span class="nav-number">4.</span> <span class="nav-text">代码管理策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#git-flow推荐工作流"><span class="nav-number">4.1.</span> <span class="nav-text">git flow推荐工作流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Android-团队"><span class="nav-number">4.2.</span> <span class="nav-text">Android 团队</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#移动团队另一种工作流"><span class="nav-number">4.2.1.</span> <span class="nav-text">移动团队另一种工作流</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些小Tip"><span class="nav-number">5.</span> <span class="nav-text">一些小Tip</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#常用-status-命令"><span class="nav-number">5.1.</span> <span class="nav-text">常用 status 命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#高质量的提交"><span class="nav-number">5.2.</span> <span class="nav-text">高质量的提交</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多使用分支"><span class="nav-number">5.3.</span> <span class="nav-text">多使用分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#遵循一个工作流程"><span class="nav-number">5.4.</span> <span class="nav-text">遵循一个工作流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#合并主分支代码到feature分支"><span class="nav-number">5.5.</span> <span class="nav-text">合并主分支代码到feature分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关联本地分支和远程分支"><span class="nav-number">5.6.</span> <span class="nav-text">关联本地分支和远程分支</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多SSH管理"><span class="nav-number">5.7.</span> <span class="nav-text">多SSH管理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#临时存储更改"><span class="nav-number">5.8.</span> <span class="nav-text">临时存储更改</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">jinhui-mobile</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
