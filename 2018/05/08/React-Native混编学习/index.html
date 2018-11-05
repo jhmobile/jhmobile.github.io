@@ -96,7 +96,7 @@
 <meta property="og:site_name" content="金汇移动开发团队">
 <meta property="og:description" content="React-Native混编学习本篇主要涉及的是App和RN的混合开发环境搭建，对于基本的RN环境搭建请自行查阅文档。 这里需要着重注意的是全局依赖：  node v8.1.3（nvm管理） react-native-cli 0.53.3(npm全局包) nrm(npm全局包，主要是为了管理npm源，切换npm源为taobao) gulp(npm全局包，主要是打包zip压缩)   最好的方式是使用">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-05-08T06:17:14.151Z">
+<meta property="og:updated_time" content="2018-10-31T02:57:58.165Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="React-Native混编学习">
 <meta name="twitter:description" content="React-Native混编学习本篇主要涉及的是App和RN的混合开发环境搭建，对于基本的RN环境搭建请自行查阅文档。 这里需要着重注意的是全局依赖：  node v8.1.3（nvm管理） react-native-cli 0.53.3(npm全局包) nrm(npm全局包，主要是为了管理npm源，切换npm源为taobao) gulp(npm全局包，主要是打包zip压缩)   最好的方式是使用">
@@ -344,7 +344,7 @@
       
 
       
-        <h1 id="React-Native混编学习"><a href="#React-Native混编学习" class="headerlink" title="React-Native混编学习"></a>React-Native混编学习</h1><p>本篇主要涉及的是App和RN的混合开发环境搭建，对于基本的RN环境搭建请自行查阅<a href="https://reactnative.cn/docs/0.51/getting-started.html" target="_blank" rel="external">文档</a>。</p>
+        <h1 id="React-Native混编学习"><a href="#React-Native混编学习" class="headerlink" title="React-Native混编学习"></a>React-Native混编学习</h1><p>本篇主要涉及的是App和RN的混合开发环境搭建，对于基本的RN环境搭建请自行查阅<a href="https://reactnative.cn/docs/0.51/getting-started.html" target="_blank" rel="noopener">文档</a>。</p>
 <p>这里需要着重注意的是全局依赖：</p>
 <ul>
 <li>node v8.1.3（nvm管理）</li>
@@ -538,7 +538,7 @@ export default class App extends React.Component {
     )
   }
 }
-</code></pre><h3 id="原生和RN的通信"><a href="#原生和RN的通信" class="headerlink" title="原生和RN的通信"></a>原生和RN的通信</h3><p>上面说道通信分为两种，主动传递和被动传递。这里的主动/被动是以原生为参照。具体的可以参考<a href="https://reactnative.cn/docs/0.51/communication-android.html#content" target="_blank" rel="external">和原生端通信</a>，这里只贴关键部分的代码。如下：</p>
+</code></pre><h3 id="原生和RN的通信"><a href="#原生和RN的通信" class="headerlink" title="原生和RN的通信"></a>原生和RN的通信</h3><p>上面说道通信分为两种，主动传递和被动传递。这里的主动/被动是以原生为参照。具体的可以参考<a href="https://reactnative.cn/docs/0.51/communication-android.html#content" target="_blank" rel="noopener">和原生端通信</a>，这里只贴关键部分的代码。如下：</p>
 <p><strong>Android部分</strong></p>
 <ul>
 <li><p>Package类</p>
@@ -707,7 +707,7 @@ export function getConstans() {
 }
 </code></pre><h3 id="RN资源管理"><a href="#RN资源管理" class="headerlink" title="RN资源管理"></a>RN资源管理</h3><p>测试发现如果将打包的Bundle文件和资源文件放到统一目录下，就可以正常引用资源。<br>参考命令<code>react-native bundle --platform android --dev false  --entry-file index.js  --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/assets</code></p>
 <p>有需要做热更的可以将资源放到SD卡中，只需要指定以下Bundle文件路径，将资源和Bundle文件放到一起就好。</p>
-<h3 id="RN开发调试"><a href="#RN开发调试" class="headerlink" title="RN开发调试"></a>RN开发调试</h3><p>这里只说我的调试方式，更详细的请查阅<a href="https://reactnative.cn/docs/0.51/debugging.html#content" target="_blank" rel="external">调试文档</a>。</p>
+<h3 id="RN开发调试"><a href="#RN开发调试" class="headerlink" title="RN开发调试"></a>RN开发调试</h3><p>这里只说我的调试方式，更详细的请查阅<a href="https://reactnative.cn/docs/0.51/debugging.html#content" target="_blank" rel="noopener">调试文档</a>。</p>
 <ol>
 <li>在<code>AndroidManifest.xml</code>中添加<code>&lt;activity android:name=&quot;com.facebook.react.devsupport.DevSettingsActivity&quot; /&gt;</code>启用调试模式。</li>
 <li>通过<code>npm start</code>启动RN服务，即<code>node node_modules/react-native/local-cli/cli.js start</code>。</li>
@@ -741,9 +741,9 @@ export function getConstans() {
 </ul>
 </li>
 </ol>
-<p><strong>部分代码参考<a href="https://github.com/songxiaoliang/ReactNativeApp" target="_blank" rel="external">ReactNativeApp</a>项目</strong></p>
+<p><strong>部分代码参考<a href="https://github.com/songxiaoliang/ReactNativeApp" target="_blank" rel="noopener">ReactNativeApp</a>项目</strong></p>
 <h2 id="iOS环境搭建"><a href="#iOS环境搭建" class="headerlink" title="iOS环境搭建"></a>iOS环境搭建</h2><p>基于Android环境搭建，iOS部署大同小异，这里仅介绍不同的部分。</p>
-<h3 id="依赖安装"><a href="#依赖安装" class="headerlink" title="依赖安装"></a>依赖安装</h3><p>修改Podfile，添加如下内容：(环境配置参考<a href="https://reactnative.cn/docs/0.51/integration-with-existing-apps.html#content" target="_blank" rel="external">集成到现有原生应用</a>)</p>
+<h3 id="依赖安装"><a href="#依赖安装" class="headerlink" title="依赖安装"></a>依赖安装</h3><p>修改Podfile，添加如下内容：(环境配置参考<a href="https://reactnative.cn/docs/0.51/integration-with-existing-apps.html#content" target="_blank" rel="noopener">集成到现有原生应用</a>)</p>
 <pre><code># &apos;node_modules&apos;目录一般位于根目录中
 # 但是如果你的结构不同，那你就要根据实际路径修改下面的`:path`
 pod &apos;React&apos;, :path =&gt; &apos;../node_modules/react-native&apos;, :subspecs =&gt; [
@@ -827,9 +827,9 @@ cachePath = [cachePath stringByAppendingPathComponent:@&quot;index.ios.bundle&qu
 NSURL *jsCodeLocation = [NSURL URLWithString:cachePath];
 </code></pre><p>中间遇到了几个编译问题导致build失败。问题与解决方法如下：</p>
 <ul>
-<li><p><a href="https://stackoverflow.com/questions/48705250/react-native-ios-could-not-build-module-yoga-algorithm-file-not-found" target="_blank" rel="external">React Native iOS: Could not build module ‘yoga’: ‘algorithm’ file not found</a></p>
+<li><p><a href="https://stackoverflow.com/questions/48705250/react-native-ios-could-not-build-module-yoga-algorithm-file-not-found" target="_blank" rel="noopener">React Native iOS: Could not build module ‘yoga’: ‘algorithm’ file not found</a></p>
 </li>
-<li><p>RCTReconnectingWebSocket.h文件的#import <fishhook fishhook.h=""> 显示error: ‘fishhook/fishhook.h’ file not found</fishhook></p>
+<li><p>RCTReconnectingWebSocket.h文件的#import &lt;fishhook/fishhook.h&gt; 显示error: ‘fishhook/fishhook.h’ file not found</p>
 <pre><code>&quot;scripts&quot;: {
     &quot;postinstall&quot;: &quot;sed -i &apos;&apos; &apos;s#&lt;fishhook/fishhook.h&gt;#\&quot;fishhook.h\&quot;#g&apos; ./node_modules/react-native/Libraries/WebSocket/RCTReconnectingWebSocket.m&quot;
 }
@@ -898,7 +898,7 @@ RCT_EXPORT_METHOD(activityFinish)
 </code></pre><p>这样就可以在RN端调用了，调用方法和Android一样。</p>
 <h3 id="RN资源管理-1"><a href="#RN资源管理-1" class="headerlink" title="RN资源管理"></a>RN资源管理</h3><p>测试发现如果将打包的Bundle文件和资源文件放到统一目录下，就可以正常引用资源。<br>参考命令<code>react-native bundle --platform ios --dev false  --entry-file index.ios.js  --bundle-output ReactNative/ios/index.ios.bundle --assets-dest ReactNative/ios</code></p>
 <p>有需要做热更的可以指定以下Bundle文件路径，将资源和Bundle文件放到一起就好。</p>
-<h3 id="RN开发调试-1"><a href="#RN开发调试-1" class="headerlink" title="RN开发调试"></a>RN开发调试</h3><p>这里只说我的调试方式，更详细的请查阅<a href="https://reactnative.cn/docs/0.51/debugging.html#content" target="_blank" rel="external">调试文档</a>。</p>
+<h3 id="RN开发调试-1"><a href="#RN开发调试-1" class="headerlink" title="RN开发调试"></a>RN开发调试</h3><p>这里只说我的调试方式，更详细的请查阅<a href="https://reactnative.cn/docs/0.51/debugging.html#content" target="_blank" rel="noopener">调试文档</a>。</p>
 <ol>
 <li>通过<code>initWithBundleURL</code>方式连接本地RN服务</li>
 <li>通过<code>npm start</code>启动RN服务，即<code>node node_modules/react-native/local-cli/cli.js start</code>。</li>

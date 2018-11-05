@@ -97,7 +97,7 @@
 <meta property="og:site_name" content="金汇移动开发团队">
 <meta property="og:description" content="起因Facebook官方对react-native（下面简称RN）在iOS端的集成方式为本地Pod库，这种方式有两个缺点：  项目更新RN依赖版本较为繁琐，需要对项目中的node_modules文件夹进行文件操作，这种方式不利于模块化和版本管理  对pod形式的库项目支持不友好，pod库的依赖只能支持name+version的形式，无法支持本地源码形式的依赖   综上，需要在公司私有Pod仓库中添">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-10-31T09:14:47.707Z">
+<meta property="og:updated_time" content="2018-11-02T07:19:33.021Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="React Native iOS本地私有库实践">
 <meta name="twitter:description" content="起因Facebook官方对react-native（下面简称RN）在iOS端的集成方式为本地Pod库，这种方式有两个缺点：  项目更新RN依赖版本较为繁琐，需要对项目中的node_modules文件夹进行文件操作，这种方式不利于模块化和版本管理  对pod形式的库项目支持不友好，pod库的依赖只能支持name+version的形式，无法支持本地源码形式的依赖   综上，需要在公司私有Pod仓库中添">
@@ -362,8 +362,10 @@
 <li>如果对本地仓库有依赖，sources要指定本地私有仓库，不然默认是查找Cocoapods官方仓库</li>
 </ul>
 <h3 id="曲线方式"><a href="#曲线方式" class="headerlink" title="曲线方式"></a>曲线方式</h3><p>另外一个思路是考虑先把RN整体打成framework，再集成到Pod库中。这种方式最终停止在一个错误：<code>invalid bitcode signature</code>，跟上面的问题一样，没有搞定。</p>
-<h3 id="手动操作Spec仓库方式"><a href="#手动操作Spec仓库方式" class="headerlink" title="手动操作Spec仓库方式"></a>手动操作Spec仓库方式</h3><p>在没有思路的时候，在google尝试搜索关键词<code>react-native  podspec</code>，发现一篇文章：<a href="https://imfong.com/post/Private-Pods-Add-react-native，里面分享通过`pod" target="_blank" rel="noopener">https://imfong.com/post/Private-Pods-Add-react-native，里面分享通过`pod</a> ipc spec`命令将.podspec文件转成.podspec.json格式文件，然后将代码和.podspec.json分别提交到代码仓库和Pod仓库的方式，绕过lint和push的常规步骤。</p>
+<h3 id="手动操作Spec仓库方式"><a href="#手动操作Spec仓库方式" class="headerlink" title="手动操作Spec仓库方式"></a>手动操作Spec仓库方式</h3><p>在没有思路的时候，在google尝试搜索关键词<code>react-native  podspec</code>，发现一篇文章：<a href="https://imfong.com/post/Private-Pods-Add-react-native" target="_blank" rel="noopener">私有Pods集成react-native库</a>，里面分享通过<code>pod ipc spec</code>命令将.podspec文件转成.podspec.json格式文件，然后将代码和.podspec.json分别提交到代码仓库和Pod仓库的方式，绕过lint和push的常规步骤。</p>
+<p>这里需要注意的是，代码提交到私有源码库和podspec提交到私有Pod库是互相独立的操作。可以只提交Podspec到私有Pod库，但是代码提交到到私有源码库有两个好处<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">1. 内部网络更新速度快</span><br><span class="line">2. 可以修改代码后自定义版本</span><br></pre></td></tr></table></figure></p>
 <p>尝试了一下，虽然遇到一些编译错误，但不是整体编译不过，而是一些RN内部类找不到，说明至少RN放到Pod仓库了。沿着这个思路往下探索，最终解决。</p>
+<p>其中RN依赖了一些第三方库，包括folly、yoga、glog等，对于RN依赖的第三方库，处理原则是如果在官方Pod仓库没有对应的版本，都需要以私有Pod的方式提供。具体需要处理哪些库，需要根据当前RN版本来判断（例如Folly的2016.10.31.00在官方库没有，但是2016.09.26.00却能支持）。</p>
 <h2 id="操作步骤"><a href="#操作步骤" class="headerlink" title="操作步骤"></a>操作步骤</h2><ol>
 <li>去<code>https://github.com/facebook/react-native/tags</code>下载对应版本的RN源码包，解压缩后将源码提交到本地仓库<a href="mailto:`git@gitlab.jinhui365.cn" target="_blank" rel="noopener">`git@gitlab.jinhui365.cn</a>:mobile/react-native.git` master分支。这里需要注意的问题是要保证该版本所有文件都会提交，包括.开头的文和文件夹。</li>
 <li>在gitlab上为新版本打一个tag，tag名称约定为v{版本号}，例如版本号为0.57.4，则tag名称为v0.57.4。</li>
@@ -385,11 +387,11 @@
 </ol>
 <h2 id="0-53-3的问题"><a href="#0-53-3的问题" class="headerlink" title="0.53.3的问题"></a>0.53.3的问题</h2><p>RN在0.53.3上有一些编译问题，李杨在<a href="https://jhmobile.github.io/2018/05/08/React-Native%E6%B7%B7%E7%BC%96%E5%AD%A6%E4%B9%A0/#iOS%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA">React-Native混编学习#iOS环境搭建</a>  提到过相关解决方案，已按照该方案经将源码修改后tag为0.53.4。可以通过引用0.53.4来规避这些问题。</p>
 <h2 id="私有库依赖私有库"><a href="#私有库依赖私有库" class="headerlink" title="私有库依赖私有库"></a>私有库依赖私有库</h2><p>金汇移动端目前负责的业务较多，不同的业务之间会复用工具库（如路由库、日志库等）。同一个业务功能，有可能需要在不同的App之间复用（如民工汇、支付SDK）。因此，依赖的路径为APP-&gt;业务库-&gt;非业务库。</p>
-<p>iOS的依赖管理与js和Android不同。js统一使用package.json管理依赖，Android统一使用gradle文件来管理依赖。而iOS主项目使用Podfile管理，库项目使用podspec管理，并且库项目无法依赖本地文件。</p>
-<p>因此新建了私有库<a href="http://gitlab.jinhui365.cn/iOS/PodLibTest来测试了下，编译通过。这里记录下常见命令：" target="_blank" rel="noopener">http://gitlab.jinhui365.cn/iOS/PodLibTest来测试了下，编译通过。这里记录下常见命令：</a></p>
+<p>iOS的依赖管理与Android不同。Android统一使用gradle文件来管理依赖，而iOS主项目使用Podfile管理，库项目使用podspec管理，并且库项目无法依赖本地文件。</p>
+<p>因此新建了私有库<a href="http://gitlab.jinhui365.cn/iOS/PodLibTest" target="_blank" rel="noopener">PodLibTest</a>来测试了下，编译通过。这里记录下常见命令：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pod lib create PodLibTest	#创建pod库项目</span><br><span class="line">pod update --no-repo-update	#更新当前pod项目依赖</span><br><span class="line">pod repo update &#123;pod仓库名称&#125;	#更新本地pod仓库</span><br><span class="line">pod lib lint --use-libraries --allow-warnings --verbose --sources=git@gitlab.jinhui365.cn:iOS/JHJRSpecs.git,https://github.com/CocoaPods/Specs.git	#这些参数上面提到过，比较关键</span><br><span class="line">pod repo push JHJR PodLibTest.podspec  --use-libraries --allow-warnings --verbose	#同样关注下参数</span><br></pre></td></tr></table></figure>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
-<li><p>Cocoapods不够完善、Facebook官方只提供的本地集成方式这两个前提条件，提升了iOS工程化的难度等级。因此需要iOS工程师对相关领域知识研究地更深入，才能达到与Android同水平的工程化程度。</p>
+<li><p>Cocoapods在依赖管理方面不够完善，提升了iOS工程化的难度等级。因此需要iOS工程师对相关领域知识研究地更深入，才能达到与Android同水平的工程化程度。</p>
 </li>
 <li><p>面对非常见疑难问题，通过简单的关键词搜索可能不太好找到解决方案。需要从两个方面着手，一方面多尝试关键词组合，找到和你遇到同样问题的人写的文章或帖子；一方面深入研究官方文档货项目源码，从原理层着手分析问题。</p>
 </li>
@@ -445,6 +447,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/10/31/hello-world/" rel="prev" title="快速开始">
+                快速开始 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>

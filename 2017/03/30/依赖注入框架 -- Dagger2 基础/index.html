@@ -97,7 +97,7 @@
 <meta property="og:site_name" content="金汇移动开发团队">
 <meta property="og:description" content="前言dagger2 是解决Android或着Java中依赖注入的一个类库（DI类库）。最近看了一些开源的项目都在使用dagger2，而且有很多对其是甚是推崇，我也蠢蠢欲动。。。在学习dagger2的过程中，我遇到了一下的困惑：  dagger2 中的Inject，Component，Module，Provides等等都是什么鬼？有什么作用 dagger2 到底有什么魔力，让大家都推崇备至 如何在项">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-09-05T01:48:23.231Z">
+<meta property="og:updated_time" content="2018-10-31T01:40:24.173Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="依赖注入框架 -- Dagger2 基础">
 <meta name="twitter:description" content="前言dagger2 是解决Android或着Java中依赖注入的一个类库（DI类库）。最近看了一些开源的项目都在使用dagger2，而且有很多对其是甚是推崇，我也蠢蠢欲动。。。在学习dagger2的过程中，我遇到了一下的困惑：  dagger2 中的Inject，Component，Module，Provides等等都是什么鬼？有什么作用 dagger2 到底有什么魔力，让大家都推崇备至 如何在项">
@@ -377,14 +377,14 @@
 <a id="more"></a>
 <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>Inject，Component，Module，Provides他们是什么？ 怎么去理解？各自有什么作用？主要讲解抽象的概念，代码的剖析，后期实践中再说~ 下面请看黑板</p>
 <h1 id="小科普"><a href="#小科普" class="headerlink" title="小科普"></a>小科普</h1><ul>
-<li><p><a href="https://leopoldcrossing.github.io/" target="_blank" rel="external">依赖注入（Dependency Injection 简称DI)</a></p>
+<li><p><a href="http://codethink.me/2015/08/01/dependency-injection-theory/" target="_blank" rel="noopener">依赖注入（Dependency Injection 简称DI)</a></p>
 </li>
-<li><p><a href="http://baike.baidu.com/item/Java%20%E6%B3%A8%E8%A7%A3?fr=aladdin" target="_blank" rel="external">注解（Annotation）</a></p>
+<li><p><a href="http://baike.baidu.com/item/Java%20%E6%B3%A8%E8%A7%A3?fr=aladdin" target="_blank" rel="noopener">注解（Annotation）</a></p>
 </li>
 </ul>
 <p>Dagger2 就是通过注解实现依赖注入的一种技术手段。</p>
 <h1 id="进入正题"><a href="#进入正题" class="headerlink" title="进入正题"></a>进入正题</h1><p>Dagger2 注入框架最重要的就是注解的使用，那么我们先来逐个分析这些东东。</p>
-<h2 id="Inject注解"><a href="#Inject注解" class="headerlink" title="@Inject注解"></a>@Inject注解</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</div><div class="line">    <span class="meta">@Inject</span></div><div class="line">    B b;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> </span>&#123;</div><div class="line">    <span class="meta">@Inject</span></div><div class="line">    B()&#123;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="Inject注解"><a href="#Inject注解" class="headerlink" title="@Inject注解"></a>@Inject注解</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    B b;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">B</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Inject</span></span><br><span class="line">    B()&#123;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>@Inject 注解用来标注目标类依赖的实例以以及被依赖类的构造函数。这样，目标类中依赖的实例与被依赖类的构造函数之间有了一种的联系，茫茫大海中，如何找到相互关联的两个 @Inject注解？</p>
 <h2 id="Component-注解"><a href="#Component-注解" class="headerlink" title="@Component 注解"></a>@Component 注解</h2><p>@Component 是连接目标类依赖的实例和被依赖类构造方法的桥梁，@Component标注的类是接口或者抽象类。既然说它是桥梁，我们来分析一下，它是如何工作的。</p>
 <ul>
@@ -410,7 +410,7 @@
 <li>有些类需要灵活选择初始化配置，而不是使用单一的构造方法</li>
 </ul>
 <p>Module 其实是一个简单工厂模式，Module里面的方法基本都是创建类示例的方法。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Module</span></div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ActivityModule</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> Activity mActivity;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ActivityModule</span><span class="params">(Activity activity)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.mActivity = activity;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="meta">@Provides</span></div><div class="line">    <span class="meta">@ActivityScope</span></div><div class="line">    <span class="function"><span class="keyword">public</span> Activity <span class="title">provideActivity</span><span class="params">()</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> mActivity;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Module</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ActivityModule</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Activity mActivity;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">ActivityModule</span><span class="params">(Activity activity)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.mActivity = activity;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Provides</span></span><br><span class="line">    <span class="meta">@ActivityScope</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Activity <span class="title">provideActivity</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> mActivity;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>Module 和 Component 又是如何关联起来呢？ </p>
 <h2 id="Component的新任务"><a href="#Component的新任务" class="headerlink" title="Component的新任务"></a>Component的新任务</h2><p>Component 是注入器，它一段连接目标类，另一端链接被依赖类。之前说到Module类是一个提供类实例的类，所以Component的新职责就是将Module提供的被依赖类示例注入到目标类中。（Component中的modules属性可以把Module加入Component，modules可以加入多个Module）。</p>
 <p>引入新问题，Modules 中创建的各种类实例如何注入到目标类中，如何与目标类中@Inject标注的依赖产生关联。</p>
@@ -422,7 +422,7 @@
 <li>Module 和 Provides  Module是一个简单工厂模式，主要包含创建类示例的方法，这些方法用Provides来标注。</li>
 </ul>
 <hr>
-<p>author: <a href="https://leopoldcrossing.github.io/" target="_blank" rel="external">@ygwang</a></p>
+<p>author: <a href="http://codethink.me/2015/08/01/dependency-injection-theory/" target="_blank" rel="noopener">@ygwang</a></p>
 
       
     </div>

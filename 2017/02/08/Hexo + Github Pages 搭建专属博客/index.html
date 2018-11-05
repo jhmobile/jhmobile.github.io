@@ -103,7 +103,7 @@
 <meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/nw1zvm0lfvlhxfr0b0kcy4q7/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2022.14.09.png">
 <meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/tjkk9gavd3p1ynowzwwzv9bk/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2022.35.10.png">
 <meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/t6cpsoeyr86jbc4r4fvmbhpj/blog-main.png">
-<meta property="og:updated_time" content="2017-09-05T01:48:23.231Z">
+<meta property="og:updated_time" content="2018-10-31T01:40:24.171Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hexo + GitHub Pages 搭建专属博客">
 <meta name="twitter:description" content="前言：2017年伊始，先给自己定了一个小目标，将Blog迁移到Hexo。本文是我2017年的开始，也是我在Hexo的开端，Mark一下！">
@@ -387,30 +387,30 @@
 <h2 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h2><p>不知道Github的程序猿，不是一只好猿 ~ Github是一个面向开源及私有软件项目的托管平台，仅支持Git作为唯一的版本库格式进行托管。</p>
 <h2 id="Github-Pages"><a href="#Github-Pages" class="headerlink" title="Github Pages"></a>Github Pages</h2><p>Github Pages可以理解为用户编写的、托管在github上的静态网页，你只需将你的改动提交到Github，就可以实现更改你的网页。</p>
 <hr>
-<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><h2 id="Node-js-点击有惊喜"><a href="#Node-js-点击有惊喜" class="headerlink" title="Node.js 点击有惊喜"></a>Node.js <a href="https://nodejs.org/en/download/" target="_blank" rel="external">点击有惊喜</a></h2><p>选择对应的安装包下载，安装我就不啰嗦了，以下命令验证安装是否成功</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ node -v</div><div class="line">$ npm -v</div></pre></td></tr></table></figure>
-<h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a><a href="https://git-scm.com/" target="_blank" rel="external">Git</a></h2><ul>
-<li>Window下载直接安装即可<a href="https://git-scm.com/download/win" target="_blank" rel="external">点我下载</a></li>
+<h1 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h1><h2 id="Node-js-点击有惊喜"><a href="#Node-js-点击有惊喜" class="headerlink" title="Node.js 点击有惊喜"></a>Node.js <a href="https://nodejs.org/en/download/" target="_blank" rel="noopener">点击有惊喜</a></h2><p>选择对应的安装包下载，安装我就不啰嗦了，以下命令验证安装是否成功</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ node -v</span><br><span class="line">$ npm -v</span><br></pre></td></tr></table></figure>
+<h2 id="Git"><a href="#Git" class="headerlink" title="Git"></a><a href="https://git-scm.com/" target="_blank" rel="noopener">Git</a></h2><ul>
+<li>Window下载直接安装即可<a href="https://git-scm.com/download/win" target="_blank" rel="noopener">点我下载</a></li>
 <li><p>Mac建议使用HomeBrew安装Git。</p>
 <ul>
 <li><p>安装HomeBrew，终端运行下面命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ /usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ /usr/bin/ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>安装Git</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ brew install git</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install git</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 </li>
 </ul>
-<h2 id="Hexo-1"><a href="#Hexo-1" class="headerlink" title="Hexo"></a><a href="https://hexo.io/zh-cn/" target="_blank" rel="external">Hexo</a></h2><p>安装命令：<br><code>$ npm install -g hexo-cli</code></p>
+<h2 id="Hexo-1"><a href="#Hexo-1" class="headerlink" title="Hexo"></a><a href="https://hexo.io/zh-cn/" target="_blank" rel="noopener">Hexo</a></h2><p>安装命令：<br><code>$ npm install -g hexo-cli</code></p>
 <hr>
-<h1 id="Hexo初始化-建站"><a href="#Hexo初始化-建站" class="headerlink" title="Hexo初始化(建站)"></a>Hexo初始化(建站)</h1><h2 id="初始化Blog文件夹"><a href="#初始化Blog文件夹" class="headerlink" title="初始化Blog文件夹"></a>初始化Blog文件夹</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ hexo init &lt;folder&gt;</div><div class="line">$ cd &lt;folder&gt;</div><div class="line">$ npm install</div></pre></td></tr></table></figure>
-<h2 id="文件目录"><a href="#文件目录" class="headerlink" title="文件目录"></a>文件目录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">.</div><div class="line">├── _config.yml    配置文件</div><div class="line">├── package.json   应用程序信息</div><div class="line">├── scaffolds      模板文件夹 draft.md post.md page.md    </div><div class="line">├── source         资源文件夹</div><div class="line">|   ├── _drafts</div><div class="line">|   └── _posts</div><div class="line">└── themes         主题</div></pre></td></tr></table></figure>
-<h2 id="Blog配置"><a href="#Blog配置" class="headerlink" title="Blog配置"></a>Blog配置</h2><p>打开_config.yml文件，懵逼了~眼花缭乱。。。挑几个常用的说一下，详解移步<a href="https://hexo.io/zh-cn/docs/configuration.html" target="_blank" rel="external">Hexo 站点配置</a><br><img src="http://static.zybuluo.com/LeoPoldCrossing/27kshpgxiptltk7p06s1cwpr/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2023.03.22.png" alt="屏幕快照 2017-02-08 23.03.22.png-179.7kB"></p>
-<h2 id="本地查看Blog效果"><a href="#本地查看Blog效果" class="headerlink" title="本地查看Blog效果"></a>本地查看Blog效果</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">#生成静态文件</div><div class="line">$ hexo generate</div><div class="line">#启动服务器</div><div class="line">$ hexo server</div></pre></td></tr></table></figure>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">$ hexo s</div><div class="line">INFO  Start processing</div><div class="line">INFO  Hexo is running at http://localhost:4000/. Press Ctrl+C to stop.</div></pre></td></tr></table></figure>
+<h1 id="Hexo初始化-建站"><a href="#Hexo初始化-建站" class="headerlink" title="Hexo初始化(建站)"></a>Hexo初始化(建站)</h1><h2 id="初始化Blog文件夹"><a href="#初始化Blog文件夹" class="headerlink" title="初始化Blog文件夹"></a>初始化Blog文件夹</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init &lt;folder&gt;</span><br><span class="line">$ cd &lt;folder&gt;</span><br><span class="line">$ npm install</span><br></pre></td></tr></table></figure>
+<h2 id="文件目录"><a href="#文件目录" class="headerlink" title="文件目录"></a>文件目录</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── _config.yml    配置文件</span><br><span class="line">├── package.json   应用程序信息</span><br><span class="line">├── scaffolds      模板文件夹 draft.md post.md page.md    </span><br><span class="line">├── source         资源文件夹</span><br><span class="line">|   ├── _drafts</span><br><span class="line">|   └── _posts</span><br><span class="line">└── themes         主题</span><br></pre></td></tr></table></figure>
+<h2 id="Blog配置"><a href="#Blog配置" class="headerlink" title="Blog配置"></a>Blog配置</h2><p>打开_config.yml文件，懵逼了~眼花缭乱。。。挑几个常用的说一下，详解移步<a href="https://hexo.io/zh-cn/docs/configuration.html" target="_blank" rel="noopener">Hexo 站点配置</a><br><img src="http://static.zybuluo.com/LeoPoldCrossing/27kshpgxiptltk7p06s1cwpr/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2023.03.22.png" alt="屏幕快照 2017-02-08 23.03.22.png-179.7kB"></p>
+<h2 id="本地查看Blog效果"><a href="#本地查看Blog效果" class="headerlink" title="本地查看Blog效果"></a>本地查看Blog效果</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#生成静态文件</span><br><span class="line">$ hexo generate</span><br><span class="line">#启动服务器</span><br><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo s</span><br><span class="line">INFO  Start processing</span><br><span class="line">INFO  Hexo is running at http://localhost:4000/. Press Ctrl+C to stop.</span><br></pre></td></tr></table></figure>
 <hr>
-<h1 id="部署Blog至Github-Pages"><a href="#部署Blog至Github-Pages" class="headerlink" title="部署Blog至Github Pages"></a>部署Blog至Github Pages</h1><h2 id="注册GitHub账户"><a href="#注册GitHub账户" class="headerlink" title="注册GitHub账户"></a><a href="https://github.com/" target="_blank" rel="external">注册GitHub账户</a></h2><h2 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h2><ul>
+<h1 id="部署Blog至Github-Pages"><a href="#部署Blog至Github-Pages" class="headerlink" title="部署Blog至Github Pages"></a>部署Blog至Github Pages</h1><h2 id="注册GitHub账户"><a href="#注册GitHub账户" class="headerlink" title="注册GitHub账户"></a><a href="https://github.com/" target="_blank" rel="noopener">注册GitHub账户</a></h2><h2 id="创建仓库"><a href="#创建仓库" class="headerlink" title="创建仓库"></a>创建仓库</h2><ul>
 <li><p>点击New Repository<br><img src="http://static.zybuluo.com/LeoPoldCrossing/yuxp9w6e6t7zzy8pci09p13l/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2021.58.51.png" alt="屏幕快照 2017-02-08 21.58.51.png-12.7kB"></p>
 </li>
 <li><p>Create a new repository<br><img src="http://static.zybuluo.com/LeoPoldCrossing/4yn5l9oi90843vutpj3ng88i/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2022.01.23.png" alt="屏幕快照 2017-02-08 22.01.23.png-85.7kB"></p>
@@ -418,13 +418,13 @@
 </ul>
 <h2 id="配置SSH密钥"><a href="#配置SSH密钥" class="headerlink" title="配置SSH密钥"></a>配置SSH密钥</h2><p>Git本地仓库和远程仓库之间的传输协议主要使用ssh协议，所以我们需要设置ssh </p>
 <ul>
-<li>Step 1 查看是否存在SSH密钥<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ cd ~/.ssh;ls</div></pre></td></tr></table></figure>
+<li>Step 1 查看是否存在SSH密钥<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ cd ~/.ssh;ls</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>如果id_rsa.pub和id_rsa文件存在，则证明ssh存在，直接进行Step 3操作</p>
 <ul>
 <li><p>Step 2 创建ssh</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"># 将根据提供的Email地址生成一对密钥</div><div class="line">$ ssh-keygen -t rsa -C &quot;youremail@example.com&quot;</div><div class="line"># 回车则创建默认的ssh，文件名为id_rsa 和 id_rsa.pub</div><div class="line"></div><div class="line"># 下面的命令可以自定义文件名</div><div class="line">$ cat ~/.ssh/&lt;ssh file name&gt;.pub</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 将根据提供的Email地址生成一对密钥</span><br><span class="line">$ ssh-keygen -t rsa -C &quot;youremail@example.com&quot;</span><br><span class="line"># 回车则创建默认的ssh，文件名为id_rsa 和 id_rsa.pub</span><br><span class="line"></span><br><span class="line"># 下面的命令可以自定义文件名</span><br><span class="line">$ cat ~/.ssh/&lt;ssh file name&gt;.pub</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>Step 3 添加SSH key 到 Github 账户</p>
 <ol>
@@ -432,27 +432,27 @@
 </li>
 <li><p>左侧工具栏点击SSH and GPG keys<br>title 随意填，Key 将id_rsa.pub中的内容copy的这里</p>
 </li>
-<li>验证链接<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">    $ ssh -T git@github.com</div><div class="line">Hi LeoPoldCrossing! You&apos;ve successfully authenticated, but GitHub does not provide shell access.</div><div class="line">    # bingo! SSH配置完成</div></pre></td></tr></table></figure>
+<li>验证链接<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">    $ ssh -T git@github.com</span><br><span class="line">Hi LeoPoldCrossing! You&apos;ve successfully authenticated, but GitHub does not provide shell access.</span><br><span class="line">    # bingo! SSH配置完成</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
 </li>
 <li><p>Step 4 绑定Git 和 Github</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ git config --global user.name &quot;your github username&quot;</div><div class="line">$ git config --global user.email &quot;your github email&quot;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name &quot;your github username&quot;</span><br><span class="line">$ git config --global user.email &quot;your github email&quot;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <h2 id="关联Hexo和GitHub"><a href="#关联Hexo和GitHub" class="headerlink" title="关联Hexo和GitHub"></a>关联Hexo和GitHub</h2><ul>
 <li><p>Step 1 Copy仓库地址<br><img src="http://static.zybuluo.com/LeoPoldCrossing/tjkk9gavd3p1ynowzwwzv9bk/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-02-08%2022.35.10.png" alt="屏幕快照 2017-02-08 22.35.10.png-106.9kB"></p>
 </li>
 <li><p>Step 2 修改_config.yml文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">deploy:</div><div class="line">  type: git</div><div class="line">  repository: https://github.com/LeoPoldCrossing/LeoPoldCrossing.github.io.git</div><div class="line">  branch: master</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repository: https://github.com/LeoPoldCrossing/LeoPoldCrossing.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>Step 3 在博客目录下执行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div><div class="line">or </div><div class="line">$ hexo g</div><div class="line">------------华丽的分割线---------</div><div class="line">$ hexo deploy</div><div class="line">or </div><div class="line">$ hexo d![blog-main.png-368.1kB][6]</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br><span class="line">or </span><br><span class="line">$ hexo g</span><br><span class="line">------------华丽的分割线---------</span><br><span class="line">$ hexo deploy</span><br><span class="line">or </span><br><span class="line">$ hexo d![blog-main.png-368.1kB][6]</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>根据提示输入github账号和密码，然后见证劳动成果的时刻<br><strong>浏览器打开 username.github.io(我的是LeoPoldCrossing.github.io)</strong>，效果图如下：<br><img src="http://static.zybuluo.com/LeoPoldCrossing/t6cpsoeyr86jbc4r4fvmbhpj/blog-main.png" alt="blog-main.png-368.1kB"></p>
 <hr>
-<p>author: <a href="https://leopoldcrossing.github.io/" target="_blank" rel="external">@ygwang</a></p>
+<p>author: <a href="https://leopoldcrossing.github.io/" target="_blank" rel="noopener">@ygwang</a></p>
 
       
     </div>

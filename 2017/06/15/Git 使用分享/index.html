@@ -98,7 +98,7 @@
 <meta property="og:description" content="Git 几个重要的概念 本地仓库Git 中大部分都是针对本地仓库的操作，完全不用担心污染远程仓库，比如 git add ，git commit ，git reset，checkout 等等。 远程仓库服务端的代码仓库，用于多人协作开发。。。每个开发人员的本地仓库都是一份完整的远程仓库备份。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://static.zybuluo.com/LeoPoldCrossing/ir365lewu7qq77m6wbvohe60/%E5%B1%8F%E5%B9%95%E5%BF%AB%E7%85%A7%202017-06-14%2017.21.06.png">
-<meta property="og:updated_time" content="2017-09-05T01:48:23.231Z">
+<meta property="og:updated_time" content="2018-10-31T01:40:24.170Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git 使用分享">
 <meta name="twitter:description" content="Git 几个重要的概念 本地仓库Git 中大部分都是针对本地仓库的操作，完全不用担心污染远程仓库，比如 git add ，git commit ，git reset，checkout 等等。 远程仓库服务端的代码仓库，用于多人协作开发。。。每个开发人员的本地仓库都是一份完整的远程仓库备份。">
@@ -374,7 +374,7 @@
 <li>远程仓库<br>服务端的代码仓库，用于多人协作开发。。。每个开发人员的本地仓库都是一份完整的远程仓库备份。</li>
 </ul>
 <a id="more"></a>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ git push  // 推送至远程</div><div class="line">$ git pull  // 从远程拉取</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git push  // 推送至远程</span><br><span class="line">$ git pull  // 从远程拉取</span><br></pre></td></tr></table></figure>
 <ul>
 <li><p>工作区<br>个人电脑中代码所在目录（除版本库之外的内容），比如我们android的项目在我电脑里的工作区就是 android-pay项目。</p>
 </li>
@@ -460,26 +460,26 @@
 <h3 id="多使用分支"><a href="#多使用分支" class="headerlink" title="多使用分支"></a>多使用分支</h3><p>分支功能应该广泛地被运用在不同的开发主题中。比如添加新功能，修复错误，尝试新的想法等等。</p>
 <h3 id="遵循一个工作流程"><a href="#遵循一个工作流程" class="headerlink" title="遵循一个工作流程"></a>遵循一个工作流程</h3><p>选择什么样的开发流程要取决如下一些因素：项目开发的类型，部署模式和开发团队成员的个人习惯（可能是最重要的）。不管怎样，选择什么样的流程都需要得到所有开发成员的一致认可，并且一直遵循它。</p>
 <h3 id="合并主分支代码到feature分支"><a href="#合并主分支代码到feature分支" class="headerlink" title="合并主分支代码到feature分支"></a>合并主分支代码到feature分支</h3><p>如果功能开发周期比较长，建议定期合dev分支代码到feature，减少冲突。</p>
-<h3 id="关联本地分支和远程分支"><a href="#关联本地分支和远程分支" class="headerlink" title="关联本地分支和远程分支"></a>关联本地分支和远程分支</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">// 关联后pull 和 push 时可以偷个懒</div><div class="line">$ git branch –set-upstream-to=&lt;repository&gt;/&lt;branch name&gt;</div></pre></td></tr></table></figure>
+<h3 id="关联本地分支和远程分支"><a href="#关联本地分支和远程分支" class="headerlink" title="关联本地分支和远程分支"></a>关联本地分支和远程分支</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 关联后pull 和 push 时可以偷个懒</span><br><span class="line">$ git branch –set-upstream-to=&lt;repository&gt;/&lt;branch name&gt;</span><br></pre></td></tr></table></figure>
 <h3 id="多SSH管理"><a href="#多SSH管理" class="headerlink" title="多SSH管理"></a>多SSH管理</h3><ul>
 <li><p>生成对应平台的 SSH key</p>
 </li>
 <li><p>添加ssh私钥</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">$ ssh-add ~/.ssh/id_rsa_github</div><div class="line">$ ssh-add ~/.ssh/id_rsa_gitlab</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-add ~/.ssh/id_rsa_github</span><br><span class="line">$ ssh-add ~/.ssh/id_rsa_gitlab</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>创建修改config文件</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"># gitlab</div><div class="line">    Host gitlab.jinhui365.cn</div><div class="line">    HostName gitlab.jinhui365.cn  </div><div class="line">    PreferredAuthentications publickey</div><div class="line">    IdentityFile ~/.ssh/id_rsa_gitlab</div><div class="line">    User gitlab username</div><div class="line"># github</div><div class="line">    Host github.com</div><div class="line">    HostName github.com</div><div class="line">    PreferredAuthentications publickey</div><div class="line">    IdentityFile ~/.ssh/id_rsa_github</div><div class="line">    User github username</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># gitlab</span><br><span class="line">    Host gitlab.jinhui365.cn</span><br><span class="line">    HostName gitlab.jinhui365.cn  </span><br><span class="line">    PreferredAuthentications publickey</span><br><span class="line">    IdentityFile ~/.ssh/id_rsa_gitlab</span><br><span class="line">    User gitlab username</span><br><span class="line"># github</span><br><span class="line">    Host github.com</span><br><span class="line">    HostName github.com</span><br><span class="line">    PreferredAuthentications publickey</span><br><span class="line">    IdentityFile ~/.ssh/id_rsa_github</span><br><span class="line">    User github username</span><br></pre></td></tr></table></figure>
 </li>
 <li><p>设置局部用户名和邮箱</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">git config user.name &quot;yourname&quot;  </div><div class="line">git config user.email &quot;youremail&quot;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git config user.name &quot;yourname&quot;  </span><br><span class="line">git config user.email &quot;youremail&quot;</span><br></pre></td></tr></table></figure>
 </li>
 </ul>
-<h3 id="临时存储更改"><a href="#临时存储更改" class="headerlink" title="临时存储更改"></a>临时存储更改</h3><p>开发过程中，由于某些原因需要切换分支，中断开发。。。需要把当前的工作区清理出来.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">// 储存工作现场</div><div class="line">$ git stash     </div><div class="line">// 查看 stash 列表</div><div class="line">$ git stash list</div><div class="line">// 恢复工作现场 </div><div class="line">$ git stash apply</div><div class="line">$ git satsh apply stash@&#123;0&#125; </div><div class="line">// 删除工作现场</div><div class="line">$ git stash drop</div><div class="line">$ git satsh drop stash@&#123;0&#125;</div><div class="line">// 恢复，并删除 stash </div><div class="line">$ git stash pop </div><div class="line">$ git satsh pop stash@&#123;0&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="临时存储更改"><a href="#临时存储更改" class="headerlink" title="临时存储更改"></a>临时存储更改</h3><p>开发过程中，由于某些原因需要切换分支，中断开发。。。需要把当前的工作区清理出来.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 储存工作现场</span><br><span class="line">$ git stash     </span><br><span class="line">// 查看 stash 列表</span><br><span class="line">$ git stash list</span><br><span class="line">// 恢复工作现场 </span><br><span class="line">$ git stash apply</span><br><span class="line">$ git satsh apply stash@&#123;0&#125; </span><br><span class="line">// 删除工作现场</span><br><span class="line">$ git stash drop</span><br><span class="line">$ git satsh drop stash@&#123;0&#125;</span><br><span class="line">// 恢复，并删除 stash </span><br><span class="line">$ git stash pop </span><br><span class="line">$ git satsh pop stash@&#123;0&#125;</span><br></pre></td></tr></table></figure></p>
 <blockquote>
 <p>Tip：临时存储时机：1， 切换分支之前 2，pull 之前 3，合并分支之前</p>
 </blockquote>
 <hr>
-<p>author <a href="https://leopoldcrossing.github.io/" target="_blank" rel="external">@ygwang</a></p>
+<p>author <a href="https://leopoldcrossing.github.io/" target="_blank" rel="noopener">@ygwang</a></p>
 
       
     </div>
